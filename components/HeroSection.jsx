@@ -7,8 +7,8 @@ import { FeaturedProperties } from "./feature-propertise";
 
 const PropertyCard = ({ property }) => {
   return (
-    <div className="flex flex-col overflow-hidden rounded shadow max-w-3xl mx-auto bg-white">
-      <div className="relative h-44 sm:h-52 w-full">
+    <div className="flex flex-col overflow-hidden rounded shadow max-w-4xl mx-auto bg-white w-full">
+      <div className="relative h-52 sm:h-64 w-full">
         <Image
           src={property.image}
           alt={property.title}
@@ -16,7 +16,7 @@ const PropertyCard = ({ property }) => {
           className="object-cover"
         />
       </div>
-      <div className="p-4 sm:p-5">
+      <div className="p-5 sm:p-6">
         <div className="flex justify-between items-start">
           <h3 className="text-base sm:text-lg font-medium truncate mr-2">
             {property.title}
@@ -25,11 +25,11 @@ const PropertyCard = ({ property }) => {
             ${property.price.toLocaleString()}
           </span>
         </div>
-        <p className="text-sm text-gray-600 mt-1 truncate">
+        <p className="text-sm text-gray-600 mt-2 truncate">
           {property.location}
         </p>
-        <div className="flex gap-3 mt-4 sm:mt-5">
-          <button className="flex-1 bg-[#183E70] text-white py-2 sm:py-2.5 px-4 sm:px-6 rounded text-sm">
+        <div className="flex gap-3 mt-5 sm:mt-6">
+          <button className="flex-1 bg-[#183E70] text-white py-2 sm:py-2.5 px-3 sm:px-4 rounded text-xs sm:text-sm whitespace-nowrap">
             Whatsapp Us
           </button>
           <button className="flex-1 bg-[#BB9632] text-white py-2 sm:py-2.5 px-4 sm:px-6 rounded text-sm">
@@ -228,110 +228,99 @@ export default function HeroSection() {
         <div className="w-full max-w-5xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between">
             {/* Location Field */}
-            <div className="w-full sm:flex-1 px-4 py-3 border-b sm:border-b-0 sm:border-r border-gray-100 flex items-center">
-              <div className="text-blue-500 mr-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 sm:h-5 sm:w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
+            <div className="w-full sm:flex-1 px-6 py-4 flex items-center">
+              <div className="flex-1 relative">
                 <label className="block text-zinc-900 text-[10px] sm:text-lg font-medium">
                   Location
                 </label>
-                <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
-                  <option>Select Area</option>
-                  <option>Bodakdev</option>
-                  <option>Satellite</option>
-                  <option>Prahlad Nagar</option>
-                </select>
+                <div className="relative">
+                  <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
+                    <option className="text-gray-200">Select Area</option>
+                    <option>Bodakdev</option>
+                    <option>Satellite</option>
+                    <option>Prahlad Nagar</option>
+                  </select>
+                  <div className="absolute right-0 top-[0%] -translate-y-1/2">
+                    <Image
+                      src="/Down 2.png"
+                      alt="Dropdown"
+                      width={20}
+                      height={20}
+                      className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
+            {/* Separator */}
+            <div className="hidden sm:block w-px h-12 bg-gray-400 my-auto"></div>
+
             {/* Property Type Field */}
-            <div className="w-full sm:flex-1 px-4 py-3 border-b sm:border-b-0 sm:border-r border-gray-100 flex items-center">
-              <div className="text-blue-500 mr-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 sm:h-5 sm:w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
+            <div className="w-full sm:flex-1 px-6 py-4 flex items-center">
+              <div className="flex-1 relative">
                 <label className="block text-zinc-900 text-[10px] sm:text-lg font-medium">
                   Property Type
                 </label>
-                <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
-                  <option>Choose Type</option>
-                  <option>Apartment</option>
-                  <option>Villa</option>
-                  <option>Penthouse</option>
-                </select>
+                <div className="relative">
+                  <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
+                    <option className="text-gray-200">
+                      Choose Property Type
+                    </option>
+                    <option>Apartment</option>
+                    <option>Villa</option>
+                    <option>Penthouse</option>
+                  </select>
+                  <div className="absolute right-0 top-[0%] -translate-y-1/2">
+                    <Image
+                      src="/Down 2.png"
+                      alt="Dropdown"
+                      width={20}
+                      height={20}
+                      className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
+            {/* Separator */}
+            <div className="hidden sm:block w-px h-12 bg-gray-400 my-auto"></div>
+
             {/* Price Range Field */}
-            <div className="w-full sm:flex-1 px-4 py-3 border-b sm:border-b-0 sm:border-r border-gray-100 flex items-center">
-              <div className="text-blue-500 mr-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 sm:h-5 sm:w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
+            <div className="w-full sm:flex-1 px-6 py-4 flex items-center">
+              <div className="flex-1 relative">
                 <label className="block text-zinc-900 text-[10px] sm:text-lg font-medium">
                   Price Range
                 </label>
-                <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
-                  <option>Price</option>
-                  <option>₹50L - ₹1Cr</option>
-                  <option>₹1Cr - ₹2Cr</option>
-                  <option>₹2Cr+</option>
-                </select>
+                <div className="relative">
+                  <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
+                    <option className="text-gray-200">
+                      Choose Price Range
+                    </option>
+                    <option>₹50L - ₹1Cr</option>
+                    <option>₹1Cr - ₹2Cr</option>
+                    <option>₹2Cr+</option>
+                  </select>
+                  <div className="absolute right-0 top-[0%] -translate-y-1/2">
+                    <Image
+                      src="/Down 2.png"
+                      alt="Dropdown"
+                      width={20}
+                      height={20}
+                      className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Search Button */}
             <div className="w-full sm:w-auto py-3 px-4 flex justify-center">
-              <button className="bg-[#BB9632]  text-white rounded-md md:rounded-semi w-full sm:w-10 md:w-12 h-10 sm:h-12 flex items-center justify-center transition-colors duration-300 shadow-md">
+              <button className="bg-[#BB9632] text-white rounded-lg w-12 h-12 flex items-center justify-center transition-colors duration-300 shadow-md hover:bg-[#A68529]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 sm:h-5 sm:w-5 scale-[1.6]"
+                  className="h-8 w-8"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -343,7 +332,6 @@ export default function HeroSection() {
                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                   />
                 </svg>
-                <span className="sm:hidden ml-2 text-sm">Search</span>
               </button>
             </div>
           </div>
@@ -555,12 +543,12 @@ export default function HeroSection() {
 
               {/* Mobile view: Carousel */}
               <div className="md:hidden">
-                <div className="relative px-3">
+                <div className="relative px-4">
                   <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4">
                     {filteredProperties.map((property) => (
                       <div
                         key={property.id}
-                        className="flex-shrink-0 w-[calc(100vw-1.5rem)] snap-center"
+                        className="flex-shrink-0 w-[calc(100vw-2.5rem)] snap-center mx-2"
                       >
                         <PropertyCard property={property} />
                       </div>
@@ -586,7 +574,7 @@ export default function HeroSection() {
               </div>
 
               {/* Desktop view: Grid layout */}
-              <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+              <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-12">
                 {filteredProperties.map((property) => (
                   <PropertyCard key={property.id} property={property} />
                 ))}
@@ -744,7 +732,7 @@ export default function HeroSection() {
       </section>
 
       {/* Contact section */}
-      <section className="py-16 px-4 relative">
+      <section className="py-16 pb-28 px-4 relative">
         <div className="container flex flex-col mx-auto px-4 md:px-6 lg:px-8">
           <h2 className="text-xl md:text-2xl">Get started</h2>
           <h1 className="text-2xl md:text-3xl lg:text-4xl mt-4 md:mt-8 font-semibold">
