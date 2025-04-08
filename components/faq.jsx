@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => {
   return (
-    <div className=" w-full bg-zinc-100 hover:scale-[1.01] rounded-xl mt-2">
+    <div className=" w-full border-b border-gray-300 hover:scale-[1.01] rounded-xl mt-2">
       <button
         className="w-full flex justify-between items-center py-3 px-6 text-left"
         onClick={onClick}
@@ -57,8 +57,8 @@ const FAQSection = () => {
   };
 
   return (
-    <div className="w-full py-4 px-6 text-black">
-      <h2 className="text-2xl font-semibold mb-3 text-center px-2">
+    <div className="w-full py-4 px-6 text-black bg-[#FFFAF4]">
+      <h2 className="text-3xl font-semibold mb-3 text-left px-2">
         Wondering How This Works
       </h2>
 

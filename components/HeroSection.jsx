@@ -4,13 +4,11 @@ import Link from "next/link";
 import Lenis from "lenis";
 import { useState, useEffect } from "react";
 import { FeaturedProperties } from "./feature-propertise";
-import { Contact } from "lucide-react";
-import { ContactForm } from "./contact-form";
 
 const PropertyCard = ({ property }) => {
   return (
-    <div className="flex flex-col overflow-hidden rounded shadow">
-      <div className="relative h-48 w-full">
+    <div className="flex flex-col overflow-hidden rounded shadow max-w-3xl mx-auto bg-white">
+      <div className="relative h-44 sm:h-52 w-full">
         <Image
           src={property.image}
           alt={property.title}
@@ -18,17 +16,23 @@ const PropertyCard = ({ property }) => {
           className="object-cover"
         />
       </div>
-      <div className="p-4">
+      <div className="p-4 sm:p-5">
         <div className="flex justify-between items-start">
-          <h3 className="text-base font-medium">{property.title}</h3>
-          <span className="font-bold">${property.price.toLocaleString()}</span>
+          <h3 className="text-base sm:text-lg font-medium truncate mr-2">
+            {property.title}
+          </h3>
+          <span className="font-bold whitespace-nowrap text-base sm:text-lg">
+            ${property.price.toLocaleString()}
+          </span>
         </div>
-        <p className="text-xs text-gray-600 mt-1">{property.location}</p>
-        <div className="flex gap-2 mt-4">
-          <button className="flex-1 bg-green-500 text-white py-2 px-4 rounded text-sm">
+        <p className="text-sm text-gray-600 mt-1 truncate">
+          {property.location}
+        </p>
+        <div className="flex gap-3 mt-4 sm:mt-5">
+          <button className="flex-1 bg-[#183E70] text-white py-2 sm:py-2.5 px-4 sm:px-6 rounded text-sm">
             Whatsapp Us
           </button>
-          <button className="flex-1 bg-blue-500 text-white py-2 px-4 rounded text-sm">
+          <button className="flex-1 bg-[#BB9632] text-white py-2 sm:py-2.5 px-4 sm:px-6 rounded text-sm">
             Get a Call
           </button>
         </div>
@@ -149,7 +153,7 @@ export default function HeroSection() {
   const [filteredProperties, setFilteredProperties] = useState(properties);
   const [isClient, setIsClient] = useState(false);
   const [openQuestion, setOpenQuestion] = useState("where");
-  const [currentSlide, setCurrentSlide] = useState(0); // Add this line
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     setIsClient(true);
@@ -248,7 +252,7 @@ export default function HeroSection() {
                 </svg>
               </div>
               <div className="flex-1">
-                <label className="block text-gray-400 text-[10px] sm:text-xs font-medium">
+                <label className="block text-zinc-900 text-[10px] sm:text-lg font-medium">
                   Location
                 </label>
                 <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
@@ -279,7 +283,7 @@ export default function HeroSection() {
                 </svg>
               </div>
               <div className="flex-1">
-                <label className="block text-gray-400 text-[10px] sm:text-xs font-medium">
+                <label className="block text-zinc-900 text-[10px] sm:text-lg font-medium">
                   Property Type
                 </label>
                 <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
@@ -310,7 +314,7 @@ export default function HeroSection() {
                 </svg>
               </div>
               <div className="flex-1">
-                <label className="block text-gray-400 text-[10px] sm:text-xs font-medium">
+                <label className="block text-zinc-900 text-[10px] sm:text-lg font-medium">
                   Price Range
                 </label>
                 <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
@@ -324,10 +328,10 @@ export default function HeroSection() {
 
             {/* Search Button */}
             <div className="w-full sm:w-auto py-3 px-4 flex justify-center">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg md:rounded-full w-full sm:w-10 md:w-12 h-10 sm:h-12 flex items-center justify-center transition-colors duration-300 shadow-md">
+              <button className="bg-[#BB9632]  text-white rounded-md md:rounded-semi w-full sm:w-10 md:w-12 h-10 sm:h-12 flex items-center justify-center transition-colors duration-300 shadow-md">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 sm:h-5 sm:w-5"
+                  className="h-4 w-4 sm:h-5 sm:w-5 scale-[1.6]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -349,54 +353,92 @@ export default function HeroSection() {
       <FeaturedProperties />
 
       {/* Featured Properties Section */}
-      <section className="py-16 px-4 bg-gradient-to-b from-blue-50 to-white">
+      <section className="py-16 px-4 ">
         <div className="container mx-auto py-8 px-4 sm:px-6">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Our Featured <span className="text-blue-600">Exclusives</span>
+          <div className="flex flex-col  justify-between items-left mb-8">
+            <h1 className="text-2xl md:text-5xl mb-5 ml-8 font-bold text-gray-900">
+              Our featured exclusives
             </h1>
-
-            <div className="hidden md:block">
+            <div className="hidden mt-8 md:flex md:flex-row md:items-center md:space-x-6 border-b border-gray-200 relative">
               <button
-                className="text-sm hover:bg-blue-50 px-3 py-1.5 rounded-full transition-colors"
+                className="text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2"
                 onClick={() => setActiveTab("all")}
               >
-                <span
-                  className={`${
+                <div
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
                     activeTab === "all"
-                      ? "text-blue-600 font-medium border-b-2 border-blue-600 pb-1"
-                      : "text-gray-600"
+                      ? "bg-[#BB9632]"
+                      : "bg-transparent border border-gray-300"
                   }`}
-                >
-                  All
+                ></div>
+                <span className="relative">
+                  <span
+                    className={`${
+                      activeTab === "all"
+                        ? "text-[#BB9632] font-bold text-base"
+                        : "text-gray-600 text-base"
+                    }`}
+                  >
+                    All
+                  </span>
+                  <span
+                    className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-transform duration-300 ease-out
+                      ${activeTab === "all" ? "scale-x-100" : "scale-x-0"}`}
+                  ></span>
                 </span>
               </button>
               <button
-                className="text-sm hover:bg-blue-50 px-3 py-1.5 rounded-full transition-colors"
+                className="text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2"
                 onClick={() => setActiveTab("rent")}
               >
-                <span
-                  className={`${
+                <div
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
                     activeTab === "rent"
-                      ? "text-blue-600 font-medium border-b-2 border-blue-600 pb-1"
-                      : "text-gray-600"
+                      ? "bg-[#BB9632]"
+                      : "bg-transparent border border-gray-300"
                   }`}
-                >
-                  For Rent
+                ></div>
+                <span className="relative">
+                  <span
+                    className={`${
+                      activeTab === "rent"
+                        ? "text-[#BB9632] font-bold text-base"
+                        : "text-gray-600 text-base"
+                    }`}
+                  >
+                    For Rent
+                  </span>
+                  <span
+                    className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-transform duration-300 ease-out
+                      ${activeTab === "rent" ? "scale-x-100" : "scale-x-0"}`}
+                  ></span>
                 </span>
               </button>
               <button
-                className="text-sm hover:bg-blue-50 px-3 py-1.5 rounded-full transition-colors"
+                className="text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2"
                 onClick={() => setActiveTab("sale")}
               >
-                <span
-                  className={`${
+                <div
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
                     activeTab === "sale"
-                      ? "text-blue-600 font-medium border-b-2 border-blue-600 pb-1"
-                      : "text-gray-600"
+                      ? "bg-[#BB9632]"
+                      : "bg-transparent border border-gray-300"
                   }`}
-                >
-                  For Sale
+                ></div>
+                <span className="relative">
+                  <span
+                    className={`${
+                      activeTab === "sale"
+                        ? "text-[#BB9632] font-bold text-base"
+                        : "text-gray-600 text-base"
+                    }`}
+                  >
+                    For Sale
+                  </span>
+                  <span
+                    className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-transform duration-300 ease-out
+                      ${activeTab === "sale" ? "scale-x-100" : "scale-x-0"}`}
+                  ></span>
                 </span>
               </button>
             </div>
@@ -405,34 +447,85 @@ export default function HeroSection() {
           {/* Mobile tabs */}
           <div className="flex md:hidden items-center space-x-6 mb-6 overflow-x-auto pb-2">
             <button
-              className={`text-sm whitespace-nowrap px-3 py-1.5 rounded-full ${
-                activeTab === "all"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-600 border border-gray-200"
-              }`}
+              className={`text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2`}
               onClick={() => setActiveTab("all")}
             >
-              All
+              <div
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  activeTab === "all"
+                    ? "bg-[#BB9632]"
+                    : "bg-transparent border border-gray-300"
+                }`}
+              ></div>
+              <span className="relative">
+                <span
+                  className={`text-base ${
+                    activeTab === "all"
+                      ? "text-[#BB9632] font-bold"
+                      : "text-gray-600"
+                  }`}
+                >
+                  All
+                </span>
+                <span
+                  className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-transform duration-300 ease-out
+                  ${activeTab === "all" ? "scale-x-100" : "scale-x-0"}`}
+                ></span>
+              </span>
             </button>
             <button
-              className={`text-sm whitespace-nowrap px-3 py-1.5 rounded-full ${
-                activeTab === "rent"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-600 border border-gray-200"
-              }`}
+              className={`text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2`}
               onClick={() => setActiveTab("rent")}
             >
-              For Rent
+              <div
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  activeTab === "rent"
+                    ? "bg-[#BB9632]"
+                    : "bg-transparent border border-gray-300"
+                }`}
+              ></div>
+              <span className="relative">
+                <span
+                  className={`text-base ${
+                    activeTab === "rent"
+                      ? "text-[#BB9632] font-bold"
+                      : "text-gray-600"
+                  }`}
+                >
+                  For Rent
+                </span>
+                <span
+                  className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-transform duration-300 ease-out
+                  ${activeTab === "rent" ? "scale-x-100" : "scale-x-0"}`}
+                ></span>
+              </span>
             </button>
             <button
-              className={`text-sm whitespace-nowrap px-3 py-1.5 rounded-full ${
-                activeTab === "sale"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-600 border border-gray-200"
-              }`}
+              className={`text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2`}
               onClick={() => setActiveTab("sale")}
             >
-              For Sale
+              <div
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  activeTab === "sale"
+                    ? "bg-[#BB9632]"
+                    : "bg-transparent border border-gray-300"
+                }`}
+              ></div>
+              <span className="relative">
+                <span
+                  className={`text-base ${
+                    activeTab === "sale"
+                      ? "text-[#BB9632] font-bold"
+                      : "text-gray-600"
+                  }`}
+                >
+                  For Sale
+                </span>
+                <span
+                  className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-transform duration-300 ease-out
+                  ${activeTab === "sale" ? "scale-x-100" : "scale-x-0"}`}
+                ></span>
+              </span>
             </button>
           </div>
 
@@ -460,29 +553,14 @@ export default function HeroSection() {
                 </svg>
               </button>
 
-              {/* Desktop view: Grid layout */}
-              <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProperties.map((property) => (
-                  <PropertyCard key={property.id} property={property} />
-                ))}
-              </div>
-
-              {/* Mobile view: Carousel with first card visible */}
+              {/* Mobile view: Carousel */}
               <div className="md:hidden">
-                {/* First card always visible */}
-                {filteredProperties.length > 0 && (
-                  <div className="mb-6">
-                    <PropertyCard property={filteredProperties[0]} />
-                  </div>
-                )}
-
-                {/* Carousel for remaining cards */}
-                <div className="relative">
-                  <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 pb-4">
-                    {filteredProperties.slice(1).map((property) => (
+                <div className="relative px-3">
+                  <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4">
+                    {filteredProperties.map((property) => (
                       <div
                         key={property.id}
-                        className="flex-shrink-0 w-full snap-center"
+                        className="flex-shrink-0 w-[calc(100vw-1.5rem)] snap-center"
                       >
                         <PropertyCard property={property} />
                       </div>
@@ -491,11 +569,13 @@ export default function HeroSection() {
 
                   {/* Mobile carousel indicators */}
                   <div className="flex justify-center mt-4 space-x-2">
-                    {filteredProperties.slice(1).map((_, index) => (
+                    {filteredProperties.map((_, index) => (
                       <button
                         key={index}
-                        className={`w-2 h-2 rounded-full ${
-                          currentSlide === index ? "bg-blue-600" : "bg-gray-300"
+                        className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-colors ${
+                          currentSlide === index
+                            ? "bg-[#BB9632]"
+                            : "bg-gray-300"
                         }`}
                         onClick={() => setCurrentSlide(index)}
                         aria-label={`Go to slide ${index + 1}`}
@@ -503,6 +583,13 @@ export default function HeroSection() {
                     ))}
                   </div>
                 </div>
+              </div>
+
+              {/* Desktop view: Grid layout */}
+              <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                {filteredProperties.map((property) => (
+                  <PropertyCard key={property.id} property={property} />
+                ))}
               </div>
 
               {/* Navigation buttons - desktop */}
@@ -526,11 +613,6 @@ export default function HeroSection() {
                   <path d="M9 18l6-6-6-6" />
                 </svg>
               </button>
-
-              {/* Mobile swipe indicators */}
-              <div className="flex md:hidden justify-center mt-4">
-                <div className="text-xs text-gray-500">Swipe for more</div>
-              </div>
             </div>
           )}
         </div>
@@ -548,10 +630,7 @@ export default function HeroSection() {
       `}</style>
 
       {/* Testimonial and Following Sections */}
-      <section
-        className="py-16 px-4"
-        style={{ backgroundColor: "rgb(246, 249, 255)" }}
-      >
+      <section className="py-16 px-4 bg-[#FFFAF4]">
         <div className="container mx-auto">
           <div className="mb-16 relative">
             <div className="max-w-4xl mx-auto text-center">
@@ -603,7 +682,7 @@ export default function HeroSection() {
             </h2>
             <Link
               href="/blog"
-              className="text-blue-600 hover:text-blue-700 font-medium flex items-center transition-colors"
+              className="text-[#BB9632] hover:text-blue-700 font-medium flex items-center transition-colors"
             >
               View All
               <svg
@@ -621,11 +700,11 @@ export default function HeroSection() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1  md:grid-cols-3 gap-6 mb-12">
             {trendingArticles.map((article) => (
               <div
                 key={article.id}
-                className="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+                className="bg-[#FFFAF4] rounded-lg overflow-hidden shadow-md transition-transform duration-300  hover:shadow-lg"
               >
                 <div className="relative h-64 w-full">
                   <Image
@@ -641,7 +720,7 @@ export default function HeroSection() {
                   </h3>
                   <Link
                     href={article.link}
-                    className="inline-flex items-center text-blue-600 font-medium hover:text-blue-700 transition-colors"
+                    className="inline-flex items-center text-[#BB9632] font-medium hover:text-[#183E70] transition-colors"
                   >
                     Read More
                     <svg
@@ -660,6 +739,97 @@ export default function HeroSection() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact section */}
+      <section className="py-16 px-4 relative">
+        <div className="container flex flex-col mx-auto px-4 md:px-6 lg:px-8">
+          <h2 className="text-xl md:text-2xl">Get started</h2>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl mt-4 md:mt-8 font-semibold">
+            Get in touch with us. We're here to assist you.
+          </h1>
+          {/* Social Media Buttons */}
+          <div className="absolute right-8 top-1/3 flex flex-col gap-3">
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#BB9632] hover:bg-gray-100 transition-colors border border-[#BB9632] shadow-md hover:shadow-lg"
+              aria-label="Instagram"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+            </a>
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#BB9632] hover:bg-gray-100 transition-colors border border-[#BB9632] shadow-md hover:shadow-lg"
+              aria-label="Facebook"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg>
+            </a>
+          </div>
+          <div className="flex flex-col md:flex-row justify-between gap-3 mt-5">
+            <div className="w-full md:w-1/3 py-3 md:py-5 px-4 border-b border-gray-400">
+              <input
+                type="text"
+                placeholder="Your Name"
+                className="w-full text-zinc-900 font-medium border-none focus:outline-none bg-transparent"
+              />
+            </div>
+            <div className="w-full md:w-1/3 py-3 md:py-5 px-4 border-b border-gray-400">
+              <input
+                type="text"
+                placeholder="Email Address"
+                className="w-full text-zinc-900 font-medium border-none focus:outline-none bg-transparent"
+              />
+            </div>
+            <div className="w-full md:w-1/3 py-3 md:py-5 px-4 border-b border-gray-400">
+              <input
+                type="text"
+                placeholder="Phone Number(Optional)"
+                className="w-full text-zinc-900 font-medium border-none focus:outline-none bg-transparent"
+              />
+            </div>
+          </div>
+          <div className="mt-5">
+            <textarea
+              placeholder="Message"
+              className="w-full min-h-[120px] px-4 py-3 border-b border-gray-400 resize-none focus:outline-none focus:border-[#BB9632] transition-colors placeholder-gray-500 bg-transparent text-base"
+              rows={4}
+            />
+          </div>
+          <div className="mt-6 md:mt-8">
+            <button
+              type="submit"
+              className="w-40 md:w-auto bg-[#BB9632] text-white px-6 py-3 rounded-3xl hover:bg-[#A68529] transition-colors font-medium"
+            >
+              Leave us a Message <span className="ml-3">→</span>
+            </button>
           </div>
         </div>
       </section>
