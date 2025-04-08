@@ -43,13 +43,12 @@ export default function Footer() {
           <div className="space-y-4 sm:space-y-6">
             <div>
               <Link href="/">
-                <div className="relative w-24 sm:w-32 md:w-40 h-10 sm:h-12 md:h-14 -mt-3 scale-[1.2] sm:scale-[1.4] md:scale-[1.65] overflow-hidden ml-15 bg-white">
+                <div className="relative w-40 h-14 -mt-3 scale-[1.65]  overflow-hidden ml-15 bg-white ">
                   <Image
                     src="/logo.png"
                     alt="Mindsestate Logo"
                     fill
                     className="object-contain p-1 bg-[#FFFAF4]"
-                    priority
                   />
                 </div>
               </Link>
