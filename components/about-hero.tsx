@@ -26,7 +26,7 @@ export default function RealEstateHero() {
                         Expert Guidance, Curated Homes, Zero Hassle
                     </h2>
                     <p className="text-gray-700 text-sm md:text-base leading-relaxed">
-                        Finding the perfect home shouldn't be overwhelming. At <span className="font-medium text-green-700">MindHabitat</span>, we simplify the process with expert
+                        Finding the perfect home shouldn't be overwhelming. At <span className="font-medium text-[#BB9627]">MindHabitat</span>, we simplify the process with expert
                         guidance tailored to your needs. Our team specializes in high-potential construction projects ensuring you
                         invest in a home with real value and future growth potential. With seamless assistance throughout the entire
                         buying-selling-renting process, we make your home-buying journey smooth, informed, and rewarding.
