@@ -548,7 +548,7 @@ export default function HeroSection() {
                     {filteredProperties.map((property) => (
                       <div
                         key={property.id}
-                        className="flex-shrink-0 w-[calc(100vw-2.5rem)] snap-center mx-2"
+                        className="flex-shrink-0 w-[calc(100vw-3rem)] snap-center mx-2"
                       >
                         <PropertyCard property={property} />
                       </div>
@@ -556,7 +556,7 @@ export default function HeroSection() {
                   </div>
 
                   {/* Mobile carousel indicators */}
-                  <div className="flex justify-center mt-4 space-x-2">
+                  <div className="flex justify-center mt-4 space-x-1.5">
                     {filteredProperties.map((_, index) => (
                       <button
                         key={index}
