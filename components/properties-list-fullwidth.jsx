@@ -152,7 +152,7 @@ function PropertyCard({
         </div>
 
         <div className="flex-1 p-4">
-          <div className="flex justify-between items-start mb-3">
+          <div className="flex justify-between items-start ">
             <div>
               <div className="flex gap-2 mb-2 flex-wrap">
                 {tags.map((tag, index) => (
@@ -174,15 +174,15 @@ function PropertyCard({
                   </span>
                 ))}
               </div>
-              <h2 className="text-lg font-semibold text-[#1d1d1f] mb-1">
+              <h2 className="text-xl font-semibold text-[#1d1d1f] mt-2">
                 {title}
               </h2>
-              <div className="flex items-center text-sm text-[#666666] mb-3">
+              <div className="flex items-center text-sm text-[#666666] mt-3">
                 <MapPin className="h-4 w-4 text-[#BB9627] mr-1 flex-shrink-0" />
                 <span className="line-clamp-1">{location}</span>
               </div>
             </div>
-            <div className="text-right ml-4 flex-shrink-0">
+            <div className="text-right ml-4  flex-shrink-0">
               {buildYear && (
                 <div className="text-xs text-[#666666] mb-1">
                   Build {buildYear}
@@ -194,7 +194,7 @@ function PropertyCard({
               )}
             </div>
           </div>
-          <div className="flex items-center gap-4 mb-3 flex-wrap">
+          <div className="flex items-center gap-4 mt-3 flex-wrap">
             {beds && (
               <div className="flex items-center text-sm text-[#666666]">
                 <Bed className="h-4 w-4 text-[#BB9627] mr-1" />
@@ -212,7 +212,6 @@ function PropertyCard({
               <span>{area}</span>
             </div>
           </div>
-          <div className="text-xs text-[#666666] mb-3">Added: {date}</div>
           <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
             <button className="px-4 sm:px-6 py-2 bg-[#183E70] text-white rounded-md text-sm font-medium w-full sm:w-auto">
               WhatsApp Us
@@ -221,6 +220,7 @@ function PropertyCard({
               Get a Call
             </button>
           </div>
+          <div className="text-xs text-[#666666] ">Added: {date}</div>
         </div>
       </div>
     </Link>
