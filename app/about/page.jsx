@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Lenis from "lenis";
 import { motion, useAnimation } from "framer-motion";
-import { FeaturedProperties } from "@/components/feature-propertise";
 import RealEstateHero from "@/components/about-hero";
+import { FeaturedPropertiesAbout } from "@/components/feature-propertise-about";
 
 export default function AboutPage() {
   useEffect(() => {
@@ -106,7 +106,7 @@ export default function AboutPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex justify-center mt-10 pl-0 pr-0">
-        <div className="relative w-[94%] h-64 rounded-xl overflow-hidden">
+        <div className="relative w-[95%] h-64 rounded-xl overflow-hidden">
           <Image
             src="/about.png"
             alt="Ahmedabad Cityscape"
@@ -200,10 +200,7 @@ export default function AboutPage() {
               </motion.div>
             </div>
           </section>
-
-          <div className="sbg-white">
-            <FeaturedProperties />
-          </div>
+          <FeaturedPropertiesAbout />
         </div>
       </main>
     </div>

@@ -7,11 +7,11 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="fixed w-full transition-all duration-300 py-4 px-6 z-50 bg-white shadow-md">
-      <div className="container mx-auto flex justify-between items-center px-6">
+    <header className="fixed w-full transition-all duration-300 py-4 px-0 z-50 bg-white shadow-md">
+      <div className="w-[88%] mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="flex items-center group">
-          <div className="relative w-35 h-12  scale-[1.65]  overflow-hidden ml-5 bg-white ">
+          <div className="relative w-35 h-12 scale-[1.65] overflow-hidden ml-0 bg-white">
             <Image
               src="/logo.png"
               alt="Mindsestate Logo"
@@ -78,7 +78,7 @@ export default function Header() {
             mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
         >
-          <div className="bg-white rounded-xl p-8 w-4/5 max-w-md transform transition-all duration-500">
+          <div className="bg-white rounded-xl p-6 w-[95%] max-w-md transform transition-all duration-500">
             <h3 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">
               Menu
             </h3>

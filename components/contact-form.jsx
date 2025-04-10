@@ -4,7 +4,7 @@ import Link from "next/link";
 export function ContactForm() {
   return (
     <section className="py-12 px-4 md:px-8 max-w-7xl mx-auto text-black">
-      <div className="mb-2">
+      <div className="mb-8">
         <span className="text-black font-medium">Get Started</span>
       </div>
 
@@ -38,7 +38,7 @@ export function ContactForm() {
             <input
               type="text"
               id="name"
-              className="w-full border-0 border-b border-gray-300 pb-2 focus:border-accent focus:ring-0 bg-transparent"
+              className="w-full border-0 border-b border-gray-300 pb-2 focus:border-accent focus:ring-0 focus:outline-none bg-transparent"
               required
             />
           </div>
@@ -50,7 +50,7 @@ export function ContactForm() {
             <input
               type="email"
               id="email"
-              className="w-full border-0 border-b border-gray-300 pb-2 focus:border-accent focus:ring-0 bg-transparent"
+              className="w-full border-0 border-b border-gray-300 pb-2 focus:border-accent focus:ring-0 focus:outline-none bg-transparent"
               required
             />
           </div>
@@ -62,7 +62,7 @@ export function ContactForm() {
             <input
               type="tel"
               id="phone"
-              className="w-full border-0 border-b border-gray-300 pb-2 focus:border-accent focus:ring-0 bg-transparent"
+              className="w-full border-0 border-b border-gray-300 pb-2 focus:border-accent focus:ring-0 focus:outline-none bg-transparent"
             />
           </div>
         </div>
@@ -74,7 +74,7 @@ export function ContactForm() {
           <textarea
             id="message"
             rows={4}
-            className="w-full border-0 border-b border-gray-300 pb-2 focus:border-accent focus:ring-0 bg-transparent resize-none"
+            className="w-full border-0 border-b border-gray-300 pb-2 focus:border-accent focus:ring-0 focus:outline-none bg-transparent resize-none"
             required
           ></textarea>
         </div>
@@ -82,7 +82,7 @@ export function ContactForm() {
         <div>
           <button
             type="submit"
-            className="bg-[rgb(66,41,255)] text-white px-6 py-3 rounded-full font-medium flex items-center"
+            className="bg-[#BB9632] text-white px-6 py-3 rounded-full font-medium flex items-center"
           >
             Leave us a Message
             <ArrowRight className="ml-2 w-5 h-5" />

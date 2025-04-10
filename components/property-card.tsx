@@ -128,9 +128,10 @@ export function PropertyCard({ property }: PropertyCardProps) {
                         <div className="text-xs text-gray-500 mb-4">Added: {property.addedDate}</div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-2">
+                    {/* Price and Action Buttons Container */}
+                    <div className="mt-auto">
                         {/* Price */}
-                        <div className="mb-4 sm:mb-0">
+                        <div className="mb-4">
                             <div className="flex items-baseline">
                                 <span className="text-xl font-bold text-gray-900">{property.price}</span>
                                 {property.priceType && <span className="ml-1 text-sm text-gray-600">{property.priceType}</span>}
@@ -139,16 +140,13 @@ export function PropertyCard({ property }: PropertyCardProps) {
                         </div>
 
                         {/* Action buttons */}
-                        <div className="flex space-x-2 w-full sm:w-auto">
-                            <button className="bg-[#25D366] text-white text-lg font-semibold py-2 px-6 rounded-full shadow-md hover:bg-[#1EBB60] transition-all">
+                        <div className="flex justify-end space-x-2">
+                            <button className="bg-[#183E70] text-white text-lg font-semibold py-2 px-6 rounded-full shadow-md hover:bg-[#1EBB60] transition-all">
                                 Whatsapp Us
                             </button>
-
-
-                            <button className="bg-blue-600 text-white text-lg font-semibold py-2 px-6 rounded-full shadow-md hover:opacity-90 transition-all">
+                            <button className="bg-[#BB9632] text-white text-lg font-semibold py-2 px-6 rounded-full shadow-md hover:opacity-90 transition-all">
                                 Get a Call
                             </button>
-
                         </div>
                     </div>
 
