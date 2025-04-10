@@ -140,11 +140,11 @@ function PropertyCard({
             className="object-cover"
           />
           <div className="absolute bottom-3 right-3 flex gap-1">
-            <button className="w-20 h-8 bg-black bg-opacity-60 rounded-[20px] flex items-center justify-center gap-1">
+            <button className="w-15 h-8 bg-black bg-opacity-60 rounded-[20px] flex items-center justify-center gap-1">
               <Camera className="h-4 w-4 text-white" />
               <span className="text-white text-xs">12</span>
             </button>
-            <button className="w-20 h-8 bg-black bg-opacity-60 rounded-[20px] flex items-center justify-center gap-1">
+            <button className="w-15 h-8 bg-black bg-opacity-60 rounded-[20px] flex items-center justify-center gap-1">
               <Video className="h-4 w-4 text-white" />
               <span className="text-white text-xs">3</span>
             </button>
