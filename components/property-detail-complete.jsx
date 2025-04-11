@@ -1,6 +1,8 @@
 // components/property-detail-complete.jsx
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import {
   Check,
   Download,
@@ -11,12 +13,71 @@ import {
   Camera,
   Video,
   Tag,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function PropertyDetailComplete({ property }) {
+  const [activeTab, setActiveTab] = useState("all");
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const similarProperties = [
+    {
+      id: 1,
+      title: "Home in Merrick Way",
+      location: "Merrick Way, Miami, FL 33134, USA",
+      beds: 3,
+      baths: 3,
+      sqft: 4300,
+      price: "$540,000",
+      image: "/link2.png",
+      type: "sale",
+    },
+    {
+      id: 2,
+      title: "Villa in Coral Gables",
+      location: "Deering Bay Drive, Coral Gables, FL 33158, USA",
+      beds: 3,
+      baths: 3.5,
+      sqft: 3500,
+      price: "$825,000",
+      image: "/link.png",
+      type: "rent",
+    },
+    {
+      id: 3,
+      title: "Villa on Hollywood Boulevard",
+      location: "Hatteras Lane, Hollywood, FL 33019, USA",
+      beds: 3,
+      baths: 4,
+      sqft: 4530,
+      price: "$740,000",
+      image: "/link3.png",
+      type: "sale",
+    },
+  ];
+
+  const filteredProperties = similarProperties.filter((prop) => {
+    if (activeTab === "all") return true;
+    if (activeTab === "rent") return prop.type === "rent";
+    if (activeTab === "sale") return prop.type === "sale";
+    return true;
+  });
+
+  const handlePrevSlide = () => {
+    setCurrentSlide((prev) =>
+      prev === 0 ? filteredProperties.length - 1 : prev - 1
+    );
+  };
+
+  const handleNextSlide = () => {
+    setCurrentSlide((prev) =>
+      prev === filteredProperties.length - 1 ? 0 : prev + 1
+    );
+  };
+
   return (
     <div className="flex flex-col text-black w-[114%] ml-[-7%] p-0 m-0 overflow-hidden">
       {/* Image Gallery Section */}
@@ -536,7 +597,6 @@ export function PropertyDetailComplete({ property }) {
               </div>
             </div>
           </section>
-          {/* Other Properties Carousel */}
         </div>
 
         {/* Sidebar */}
@@ -709,6 +769,140 @@ export function PropertyDetailComplete({ property }) {
           </div>
         </div>
       </div>
+      {/* Similar Properties */}
+      <section
+        className="bg-white py-12 w-full relative"
+        style={{
+          marginLeft: "calc(-50vw + 50%)",
+          marginRight: "calc(-50vw + 50%)",
+          width: "100vw",
+        }}
+      >
+        <div className="max-w-[2000px] mx-auto px-8 relative">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6 ml-10">
+            Similar Properties
+          </h2>
+
+          {/* Tabs */}
+          <div className="flex border-b border-gray-200 mb-8 justify-start ml-10">
+            <button
+              onClick={() => setActiveTab("all")}
+              className={`text-sm px-1 pb-4 border-b-2 ${
+                activeTab === "all"
+                  ? "border-[#BB9632] text-[#BB9632]"
+                  : "border-transparent text-gray-600"
+              } font-medium flex items-center gap-2`}
+            >
+              <div
+                className={`w-1.5 h-1.5 rounded-full ${
+                  activeTab === "all"
+                    ? "bg-[#BB9632]"
+                    : "border border-gray-300"
+                }`}
+              ></div>
+              All
+            </button>
+            <button
+              onClick={() => setActiveTab("rent")}
+              className={`text-sm px-1 pb-4 border-b-2 ${
+                activeTab === "rent"
+                  ? "border-[#BB9632] text-[#BB9632]"
+                  : "border-transparent text-gray-600"
+              } font-medium ml-8 flex items-center gap-2`}
+            >
+              <div
+                className={`w-1.5 h-1.5 rounded-full ${
+                  activeTab === "rent"
+                    ? "bg-[#BB9632]"
+                    : "border border-gray-300"
+                }`}
+              ></div>
+              For Rent
+            </button>
+            <button
+              onClick={() => setActiveTab("sale")}
+              className={`text-sm px-1 pb-4 border-b-2 ${
+                activeTab === "sale"
+                  ? "border-[#BB9632] text-[#BB9632]"
+                  : "border-transparent text-gray-600"
+              } font-medium ml-8 flex items-center gap-2`}
+            >
+              <div
+                className={`w-1.5 h-1.5 rounded-full ${
+                  activeTab === "sale"
+                    ? "bg-[#BB9632]"
+                    : "border border-gray-300"
+                }`}
+              ></div>
+              For Sale
+            </button>
+          </div>
+
+          {/* Navigation Arrows */}
+          <button
+            onClick={handlePrevSlide}
+            className="absolute left-16 top-1/2 p-4 rounded-md border border-gray-200 bg-white shadow-lg hover:bg-gray-50 transition-colors transform -translate-y-1/2 z-10"
+          >
+            <ChevronLeft className="h-6 w-6 text-gray-600" />
+          </button>
+
+          <button
+            onClick={handleNextSlide}
+            className="absolute right-16 top-1/2 p-4 rounded-md border border-gray-200 bg-white shadow-lg hover:bg-gray-50 transition-colors transform -translate-y-1/2 z-10"
+          >
+            <ChevronRight className="h-6 w-6 text-gray-600" />
+          </button>
+
+          {/* Property Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3  justify-items-center">
+            {filteredProperties.map((prop) => (
+              <div
+                key={prop.id}
+                className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow duration-300 w-full max-w-sm"
+              >
+                <div className="relative h-64">
+                  <Image
+                    src={prop.image}
+                    alt={prop.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="font-semibold text-gray-900 text-lg">
+                    {prop.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-2">{prop.location}</p>
+                  <div className="flex items-center gap-6 mt-4">
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm text-gray-600">{prop.beds}</span>
+                      <span className="text-sm text-gray-500">bed</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm text-gray-600">
+                        {prop.baths}
+                      </span>
+                      <span className="text-sm text-gray-500">bath</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm text-gray-600">{prop.sqft}</span>
+                      <span className="text-sm text-gray-500">sq ft</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between mt-6">
+                    <span className="text-[#BB9632] font-semibold text-lg">
+                      {prop.price}
+                    </span>
+                    <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
