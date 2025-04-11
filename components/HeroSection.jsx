@@ -46,6 +46,12 @@ export default function HeroSection() {
     if (typeof window !== "undefined") {
       const lenis = new Lenis({
         autoRaf: true,
+        lerp: 0.05,
+        duration: 0.5,
+        smoothWheel: true,
+        wheelMultiplier: 1.2,
+        smoothTouch: true,
+        touchMultiplier: 1.2,
       });
 
       lenis.on("scroll", (e) => {
