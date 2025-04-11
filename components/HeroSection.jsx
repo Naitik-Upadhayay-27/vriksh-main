@@ -700,13 +700,15 @@ export default function HeroSection() {
                 key={article.id}
                 className="bg-[#FFFAF4] rounded-lg overflow-hidden shadow-md transition-transform duration-300  hover:shadow-lg"
               >
-                <div className="relative h-64 w-full">
-                  <Image
-                    src={article.image}
-                    alt={article.title}
-                    fill
-                    className="object-cover"
-                  />
+                <div className="relative h-64 w-full overflow-hidden">
+                  <div className="w-full h-full transform transition-transform duration-300 hover:scale-95">
+                    <Image
+                      src={article.image}
+                      alt={article.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
                 <div className="p-5">
                   <h3 className="font-bold text-gray-800 text-lg mb-3 line-clamp-2">

@@ -113,12 +113,14 @@ export default function AboutPage() {
     <div className="flex flex-col min-h-screen">
       <div className="flex justify-center mt-10 pl-0 pr-0">
         <div className="relative w-[95%] h-64 rounded-xl overflow-hidden">
-          <Image
-            src="/about.png"
-            alt="Ahmedabad Cityscape"
-            layout="fill"
-            className="w-full h-full object-cover brightness-[1.3] blur-0"
-          />
+          <div className="w-full h-full transform transition-transform duration-300 hover:scale-[1.05]">
+            <Image
+              src="/about.png"
+              alt="Ahmedabad Cityscape"
+              layout="fill"
+              className="w-full h-full object-cover brightness-[1.3] blur-0"
+            />
+          </div>
           <div className="absolute inset-0 flex items-center justify-center bg-black/20">
             <h1 className="text-white text-4xl font-bold">About Us</h1>
           </div>

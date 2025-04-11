@@ -28,38 +28,38 @@ export function FeaturedProperties() {
                     <div className="hidden lg:block lg:w-1/2">
                         <div className="relative w-full h-[500px] lg:h-[600px]">
                             {/* Top left image - Large */}
-                            <div className="absolute top-0 left-0 w-[49%] h-[58%] overflow-hidden rounded-md">
+                            <div className="absolute top-0 left-0 w-[49%] h-[58%] overflow-hidden rounded-md group">
                                 <img
                                     src="/building1.png"
                                     alt="Residential building"
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                 />
                             </div>
 
                             {/* Top right image - Small */}
-                            <div className="absolute top-0 right-0 w-[49%] h-[45%] overflow-hidden rounded-md">
+                            <div className="absolute top-0 right-0 w-[49%] h-[45%] overflow-hidden rounded-md group">
                                 <img
                                     src="/building2.png"
                                     alt="Modern apartment complex"
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                 />
                             </div>
 
                             {/* Bottom left image - Small */}
-                            <div className="absolute bottom-0 left-0 w-[49%] h-[40%] overflow-hidden rounded-md">
+                            <div className="absolute bottom-0 left-0 w-[49%] h-[40%] overflow-hidden rounded-md group">
                                 <img
                                     src="/building3.png"
                                     alt="Luxury residential complex"
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                 />
                             </div>
 
                             {/* Bottom right image - Large */}
-                            <div className="absolute bottom-0 right-0 w-[49%] h-[53%] overflow-hidden rounded-md">
+                            <div className="absolute bottom-0 right-0 w-[49%] h-[53%] overflow-hidden rounded-md group">
                                 <img
                                     src="/building4.png"
                                     alt="High-rise apartment building"
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                 />
                             </div>
                         </div>

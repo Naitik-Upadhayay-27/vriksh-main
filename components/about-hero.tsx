@@ -6,14 +6,16 @@ export default function RealEstateHero() {
             <div className="flex flex-col md:flex-row gap-30 items-center">
                 {/* Left side - Image */}
                 <div className="w-full md:w-[50%]">
-                    <div className="relative rounded-xl overflow-hidden aspect-[4/3] shadow-lg">
-                        <Image
-                            src="/about1.png"
-                            alt="Modern urban building with skyscrapers in the background"
-                            fill
-                            className="object-cover hover:scale-105 transition-transform duration-500"
-                            priority
-                        />
+                    <div className="relative rounded-xl overflow-hidden aspect-[4/3] shadow-lg group">
+                        <div className="absolute inset-0 transform transition-transform duration-300 group-hover:scale-[1.06]">
+                            <Image
+                                src="/about1.png"
+                                alt="Modern urban building with skyscrapers in the background"
+                                fill
+                                className="object-cover"
+                                priority
+                            />
+                        </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
                 </div>

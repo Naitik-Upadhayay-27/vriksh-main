@@ -25,8 +25,15 @@ export function PropertyCard({ property }: PropertyCardProps) {
         <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             <div className="flex flex-col md:flex-row">
                 {/* Property Image */}
-                <div className="relative md:w-1/3 h-64 md:h-auto">
-                    <Image src={property.image || "/placeholder.svg"} alt={property.title} fill className="object-cover" />
+                <div className="relative md:w-1/3 h-64 md:h-auto overflow-hidden">
+                    <div className="w-full h-full transform transition-transform duration-300 hover:scale-2000 hover:rounded-none">
+                        <Image 
+                            src={property.image || "/placeholder.svg"} 
+                            alt={property.title} 
+                            fill 
+                            className="object-cover" 
+                        />
+                    </div>
                     <div className="absolute bottom-3 left-3 flex space-x-2">
                         <div className="bg-black bg-opacity-60 text-black text-xs px-1.5 py-1 rounded-md flex items-center">
                             <svg

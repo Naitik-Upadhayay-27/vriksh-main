@@ -28,7 +28,7 @@ export const FeaturedPropertiesAbout: React.FC<FeaturedPropertiesAboutProps> = (
                                     alt="Residential building"
                                     width={500}
                                     height={300}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                                 />
                             </div>
 
@@ -39,7 +39,7 @@ export const FeaturedPropertiesAbout: React.FC<FeaturedPropertiesAboutProps> = (
                                     alt="Modern apartment complex"
                                     width={500}
                                     height={300}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                                 />
                             </div>
 
@@ -50,7 +50,7 @@ export const FeaturedPropertiesAbout: React.FC<FeaturedPropertiesAboutProps> = (
                                     alt="Luxury residential complex"
                                     width={500}
                                     height={300}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                                 />
                             </div>
 
@@ -61,7 +61,7 @@ export const FeaturedPropertiesAbout: React.FC<FeaturedPropertiesAboutProps> = (
                                     alt="High-rise apartment building"
                                     width={500}
                                     height={300}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                                 />
                             </div>
                         </div>
