@@ -1,6 +1,4 @@
 "use client";
-// import { Header } from "@/components/header"
-// import { Footer } from "@/components/footer"
 import { ContactForm } from "@/components/contact-form";
 import { ContactHero } from "@/components/contact-hero";
 import { ContactInfo } from "@/components/contact-info";
@@ -13,6 +11,12 @@ export default function ContactPage() {
     if (typeof window !== "undefined") {
       const lenis = new Lenis({
         autoRaf: true,
+        lerp: 0.05,
+        duration: 0.5,
+        smoothWheel: true,
+        wheelMultiplier: 1.2,
+        smoothTouch: true,
+        touchMultiplier: 1.2,
       });
 
       lenis.on("scroll", (e) => {

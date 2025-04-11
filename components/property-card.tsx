@@ -77,7 +77,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
                         {/* Tags */}
                         <div className="flex flex-wrap gap-2 mb-3">
                             <span
-                                className={`text-xs font-medium px-2 py-1 rounded-full ${property.type === "For Rent" ? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"}`}
+                                className={`text-xs font-medium px-2 py-1 rounded-full ${property.type === "For Rent" ? "bg-[#BB9627] text-white" : "bg-[#BB9627] text-purple-700"}`}
                             >
                                 {property.type}
                             </span>

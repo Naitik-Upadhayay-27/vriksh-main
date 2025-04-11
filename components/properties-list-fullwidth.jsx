@@ -285,7 +285,7 @@ export default function PropertiesListFullwidth() {
       </div>
       <div className="flex justify-center mt-8">
         <div className="flex gap-2">
-          <button className="w-8 h-8 flex items-center justify-center rounded-full bg-[#0196ff] text-white text-sm">
+          <button className="w-8 h-8 flex items-center justify-center rounded-full bg-[#BB9627] text-white text-sm">
             1
           </button>
           <button className="w-8 h-8 flex items-center justify-center rounded-full text-[#666666] text-sm hover:bg-gray-100">

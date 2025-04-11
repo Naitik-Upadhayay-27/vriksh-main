@@ -27,7 +27,7 @@ export default function Header() {
             <Link
               key={index}
               href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-              className="relative font-medium transition-all duration-300 hover:text-blue-600 after:absolute after:w-0 after:h-0.5 after:bg-blue-600 after:bottom-[-4px] after:left-0 after:transition-all after:duration-300 hover:after:w-full text-gray-800"
+              className="relative font-medium transition-all duration-300 hover:text-[#BB9627] after:absolute after:w-0 after:h-0.5 after:bg-[#BB9627] after:bottom-[-4px] after:left-0 after:transition-all after:duration-300 hover:after:w-full text-gray-800"
             >
               {item}
             </Link>
