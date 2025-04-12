@@ -208,7 +208,7 @@ export default function HeroSection() {
   return (
     <section className="relative">
       {/* Hero Section */}
-      <div className="relative h-[650px]">
+      <div className="relative h-[400px] sm:h-[500px] md:h-[650px]">
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent flex flex-col justify-center items-center text-white text-center px-4">
           <Image
             src="/home1.png"
@@ -219,10 +219,10 @@ export default function HeroSection() {
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30 flex flex-col justify-center items-center text-white text-center px-4">
-          <h1 className="text-5xl md:text-6xl font-serif font-extrabold mb-6 leading-tight max-w-4xl">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-extrabold mb-4 sm:mb-6 leading-tight max-w-4xl">
             Find. Invest. Thrive.
           </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-2xl font-light font-serif">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-4 sm:mb-8 max-w-2xl font-light font-serif">
             Find Your Perfect Home in Ahmedabad – Effortless, Reliable, and Made
             for You!
           </p>
@@ -231,7 +231,7 @@ export default function HeroSection() {
 
       {/* Search Panel Section */}
       <div className="relative -mt-14 px-4 z-10">
-        <div className="w-full max-w-5xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100">
+        <div className="w-full max-w-5xl mx-auto bg-white md:bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100 backdrop-blur-sm bg-black/30 md:backdrop-blur-none md:bg-transparent">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between">
             {/* Location Field */}
             <div className="w-full sm:flex-1 px-6 py-4 flex items-center">
@@ -241,7 +241,7 @@ export default function HeroSection() {
                 </label>
                 <div className="relative">
                   <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
-                    <option className="text-gray-200">Select Area</option>
+                    <option className="text-gray-900">Select Area</option>
                     <option>Bodakdev</option>
                     <option>Satellite</option>
                     <option>Prahlad Nagar</option>
@@ -270,7 +270,7 @@ export default function HeroSection() {
                 </label>
                 <div className="relative">
                   <select className="w-full bg-transparent border-none focus:outline-none text-gray-800 font-medium text-xs sm:text-sm py-1 appearance-none">
-                    <option className="text-gray-200">
+                    <option className="text-gray-900">
                       Choose Property Type
                     </option>
                     <option>Apartment</option>
@@ -350,7 +350,7 @@ export default function HeroSection() {
       <section className="py-16 px-4 ">
         <div className="container mx-auto py-8 px-4 sm:px-6">
           <div className="flex flex-col  justify-between items-left mb-8">
-            <h1 className="text-2xl md:text-5xl mb-5 ml-8 font-bold text-gray-900">
+            <h1 className="text-2xl md:text-5xl mb-5 ml-8 font-bold text-gray-900 text-center md:text-left">
               Our featured exclusives
             </h1>
             <div className="hidden mt-8 md:flex md:flex-row md:items-center md:space-x-6 border-b border-gray-200 relative">
@@ -441,11 +441,13 @@ export default function HeroSection() {
           {/* Mobile tabs */}
           <div className="flex md:hidden items-center space-x-6 mb-6 overflow-x-auto pb-2">
             <button
-              className={`text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2`}
+              className={`text-sm relative px-3 pb-4 rounded-full transition-all duration-300 group flex items-center gap-2 ${
+                activeTab === "all" ? "text-[#BB9632]" : "text-gray-600"
+              }`}
               onClick={() => setActiveTab("all")}
             >
               <div
-                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                   activeTab === "all"
                     ? "bg-[#BB9632]"
                     : "bg-transparent border border-gray-300"
@@ -453,26 +455,27 @@ export default function HeroSection() {
               ></div>
               <span className="relative">
                 <span
-                  className={`text-base ${
-                    activeTab === "all"
-                      ? "text-[#BB9632] font-bold"
-                      : "text-gray-600"
+                  className={`text-base font-medium transition-all duration-300 ${
+                    activeTab === "all" ? "text-[#BB9632]" : "text-gray-600"
                   }`}
                 >
                   All
                 </span>
                 <span
-                  className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-transform duration-300 ease-out
-                  ${activeTab === "all" ? "scale-x-100" : "scale-x-0"}`}
+                  className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-all duration-300 ${
+                    activeTab === "all" ? "scale-x-100" : "scale-x-0"
+                  }`}
                 ></span>
               </span>
             </button>
             <button
-              className={`text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2`}
+              className={`text-sm relative px-3 pb-4 rounded-full transition-all duration-300 group flex items-center gap-2 ${
+                activeTab === "rent" ? "text-[#BB9632]" : "text-gray-600"
+              }`}
               onClick={() => setActiveTab("rent")}
             >
               <div
-                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                   activeTab === "rent"
                     ? "bg-[#BB9632]"
                     : "bg-transparent border border-gray-300"
@@ -480,26 +483,27 @@ export default function HeroSection() {
               ></div>
               <span className="relative">
                 <span
-                  className={`text-base ${
-                    activeTab === "rent"
-                      ? "text-[#BB9632] font-bold"
-                      : "text-gray-600"
+                  className={`text-base font-medium transition-all duration-300 ${
+                    activeTab === "rent" ? "text-[#BB9632]" : "text-gray-600"
                   }`}
                 >
                   For Rent
                 </span>
                 <span
-                  className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-transform duration-300 ease-out
-                  ${activeTab === "rent" ? "scale-x-100" : "scale-x-0"}`}
+                  className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-all duration-300 ${
+                    activeTab === "rent" ? "scale-x-100" : "scale-x-0"
+                  }`}
                 ></span>
               </span>
             </button>
             <button
-              className={`text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2`}
+              className={`text-sm relative px-3 pb-4 rounded-full transition-all duration-300 group flex items-center gap-2 ${
+                activeTab === "sale" ? "text-[#BB9632]" : "text-gray-600"
+              }`}
               onClick={() => setActiveTab("sale")}
             >
               <div
-                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                   activeTab === "sale"
                     ? "bg-[#BB9632]"
                     : "bg-transparent border border-gray-300"
@@ -507,17 +511,16 @@ export default function HeroSection() {
               ></div>
               <span className="relative">
                 <span
-                  className={`text-base ${
-                    activeTab === "sale"
-                      ? "text-[#BB9632] font-bold"
-                      : "text-gray-600"
+                  className={`text-base font-medium transition-all duration-300 ${
+                    activeTab === "sale" ? "text-[#BB9632]" : "text-gray-600"
                   }`}
                 >
                   For Sale
                 </span>
                 <span
-                  className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-transform duration-300 ease-out
-                  ${activeTab === "sale" ? "scale-x-100" : "scale-x-0"}`}
+                  className={`absolute -bottom-4 left-0 w-full h-0.5 bg-[#BB9632] transform origin-left transition-all duration-300 ${
+                    activeTab === "sale" ? "scale-x-100" : "scale-x-0"
+                  }`}
                 ></span>
               </span>
             </button>
@@ -550,13 +553,26 @@ export default function HeroSection() {
               {/* Mobile view: Carousel */}
               <div className="md:hidden">
                 <div className="relative px-4">
-                  <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4">
+                  <div
+                    className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4"
+                    onScroll={(e) => {
+                      const container = e.target;
+                      const scrollLeft = container.scrollLeft;
+                      const containerWidth = container.clientWidth;
+                      const currentIndex = Math.round(
+                        scrollLeft / containerWidth
+                      );
+                      setCurrentSlide(currentIndex);
+                    }}
+                  >
                     {filteredProperties.map((property) => (
                       <div
                         key={property.id}
-                        className="flex-shrink-0 w-[calc(100vw-3rem)] snap-center mx-2"
+                        className="flex-shrink-0 w-[calc(100vw-2rem)] snap-center mx-1"
                       >
-                        <PropertyCard property={property} />
+                        <div className="w-full h-full">
+                          <PropertyCard property={property} />
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -566,12 +582,20 @@ export default function HeroSection() {
                     {filteredProperties.map((_, index) => (
                       <button
                         key={index}
-                        className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-colors ${
+                        className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 ${
                           currentSlide === index
-                            ? "bg-[#BB9632]"
+                            ? "bg-[#BB9632] scale-125"
                             : "bg-gray-300"
                         }`}
-                        onClick={() => setCurrentSlide(index)}
+                        onClick={() => {
+                          const container =
+                            document.querySelector(".overflow-x-auto");
+                          container.scrollTo({
+                            left: index * container.clientWidth,
+                            behavior: "smooth",
+                          });
+                          setCurrentSlide(index);
+                        }}
                         aria-label={`Go to slide ${index + 1}`}
                       />
                     ))}
@@ -747,7 +771,7 @@ export default function HeroSection() {
             Get in touch with us. We're here to assist you.
           </h1>
           {/* Social Media Buttons */}
-          <div className="absolute right-8 top-1/3 flex flex-col gap-3">
+          <div className="hidden md:flex absolute right-8 top-1/3 flex-col gap-3">
             <a
               href="#"
               className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#BB9632] hover:bg-gray-100 transition-colors border border-[#BB9632] shadow-md hover:shadow-lg"
@@ -822,9 +846,9 @@ export default function HeroSection() {
           <div className="mt-6 md:mt-8">
             <button
               type="submit"
-              className="w-40 md:w-auto bg-[#BB9632] text-white px-6 py-3 rounded-3xl hover:bg-[#A68529] transition-colors font-medium"
+              className="w-full sm:w-auto bg-[#BB9632] text-white px-4 sm:px-6 py-3 rounded-3xl hover:bg-[#A68529] transition-colors font-medium whitespace-nowrap text-sm sm:text-base"
             >
-              Leave us a Message <span className="ml-3">→</span>
+              Leave us a Message <span className="ml-2 sm:ml-3">→</span>
             </button>
           </div>
         </div>

@@ -13,14 +13,14 @@ export function FeaturedProperties() {
             <div className="container mx-auto">
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-8 sm:gap-12">
                     <div className="w-full lg:w-2/5  px-5 py-15 rounded-xl">
-                        <h2 className="text-3xl sm:text-4xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">
                             Your Trusted Gateway to Ahmedabad's Finest Homes
                         </h2>
-                        <p className="text-zinc-900 mb-6 sm:mb-8 leading-relaxed text-lg ">
+                        <p className="text-zinc-900 mb-6 sm:mb-8 leading-relaxed text-base sm:text-lg">
                             Mindsestate is a dedicated real estate consultancy focused on bringing Ahmedabad's most promising under-construction residential projects to discerning homebuyers. We simplify the home-buying process with expert market insights, personalized assistance, and a commitment to transparency.
                         </p>
-                        <button className="border-2 border-[#BB9632] text-[#BB9632] font-semibold rounded-md px-6 sm:px-8 py-2 sm:py-3 inline-flex items-center text-xl sm:text-sm bg-white hover:bg-[#BB9632] hover:text-white transition-all duration-300 shadow-sm">
-                            Read More <span className="ml-3">→</span>
+                        <button className="border-2 border-[#BB9632] text-[#BB9632] font-semibold rounded-md px-4 sm:px-6 py-1.5 sm:py-2 md:py-3 inline-flex items-center text-base sm:text-xl bg-white hover:bg-[#BB9632] hover:text-white transition-all duration-300 shadow-sm">
+                            Read More <span className="ml-2 sm:ml-3">→</span>
                         </button>
                     </div>
 
