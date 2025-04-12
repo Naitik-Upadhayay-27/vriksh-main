@@ -565,7 +565,7 @@ export default function HeroSection() {
                     {filteredProperties.map((property) => (
                       <div
                         key={property.id}
-                        className="flex-shrink-0 w-[83vw] snap-center"
+                        className="flex-shrink-0 w-[84.5vw] snap-center"
                       >
                         <div className="w-full h-full">
                           <PropertyCard property={property} />
