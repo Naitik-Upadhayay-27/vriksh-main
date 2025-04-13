@@ -38,9 +38,9 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[#FFFAF4] py-8 px-4 md:py-12 md:px-8 lg:px-16">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 lg:gap-16">
           {/* Logo and Contact Info */}
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-4 sm:space-y-6 lg:space-y-8">
             <div>
               <Link href="/">
                 <div className="relative w-40 h-14 -mt-3 scale-[1.65] overflow-hidden ml-15 bg-white">
@@ -53,7 +53,7 @@ export default function Footer() {
                 </div>
               </Link>
 
-              <div className="mt-15 space-y-3 text-[#1d1d1f] text-sm md:text-base">
+              <div className="mt-15 space-y-3 lg:space-y-4 text-[#1d1d1f] text-sm md:text-base">
                 <div className="flex items-start">
                   <MapPin className="h-4 w-4 md:h-5 md:w-5 mr-2 mt-0.5 flex-shrink-0 text-gray-400" />
                   <span className="text-sm md:text-base">
@@ -74,75 +74,78 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="mt-2 sm:mt-0">
-            <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6 text-[#000000]">
-              Quick Links
-            </h3>
-            <ul className="space-y-2 md:space-y-4 text-[#1d1d1f] text-sm md:text-base">
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#0196ff] transition-colors"
-                >
-                  Properties Listing
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#0196ff] transition-colors"
-                >
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#0196ff] transition-colors"
-                >
-                  Contact
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Quick Links and Other Pages */}
+          <div className="flex flex-row justify-between w-full gap-8 md:gap-12">
+            {/* Quick Links */}
+            <div className="w-1/2">
+              <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6 lg:mb-8 text-[#000000]">
+                Quick Links
+              </h3>
+              <ul className="space-y-2 md:space-y-4 text-[#1d1d1f] text-sm md:text-base">
+                <li>
+                  <Link
+                    href="#"
+                    className="hover:text-[#BB9627] transition-colors"
+                  >
+                    Properties Listing
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#"
+                    className="hover:text-[#BB9627] transition-colors"
+                  >
+                    Blog
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#"
+                    className="hover:text-[#BB9627] transition-colors"
+                  >
+                    Contact
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-          {/* Other Pages */}
-          <div className="mt-2 sm:mt-0">
-            <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6 text-[#000000]">
-              Other Pages
-            </h3>
-            <ul className="space-y-2 md:space-y-4 text-[#1d1d1f] text-sm md:text-base">
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#0196ff] transition-colors"
-                >
-                  Agents
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#0196ff] transition-colors"
-                >
-                  Agencies
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#0196ff] transition-colors"
-                >
-                  FAQs
-                </Link>
-              </li>
-            </ul>
+            {/* Other Pages */}
+            <div className="w-1/2">
+              <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6 lg:mb-8 text-[#000000]">
+                Other Pages
+              </h3>
+              <ul className="space-y-2 md:space-y-4 text-[#1d1d1f] text-sm md:text-base">
+                <li>
+                  <Link
+                    href="#"
+                    className="hover:text-[#BB9627] transition-colors"
+                  >
+                    Agents
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#"
+                    className="hover:text-[#BB9627] transition-colors"
+                  >
+                    Agencies
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#"
+                    className="hover:text-[#BB9627] transition-colors"
+                  >
+                    FAQs
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
 
           {/* Talk To An Expert */}
-          <div className="mt-4 sm:mt-0">
-            <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6 text-[#000000]">
+          <div className="mt-4 sm:mt-0 lg:mt-0">
+            <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6 lg:mb-8 text-[#000000]">
               Talk To An Expert
             </h3>
             <p className="mb-4 md:mb-6 text-[#1d1d1f] text-sm md:text-base">
@@ -189,8 +192,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 md:mt-12 md:pt-8 border-t border-gray-200">
-          <div className="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-gray-500">
+        <div className="mt-8 pt-6 md:mt-12 md:pt-8 lg:mt-16 lg:pt-10 border-t border-gray-200">
+          <div className="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-gray-500 gap-4 md:gap-0">
             <p>© 2024 RealHomes. All Rights Reserved</p>
             <p className="mt-2 md:mt-0">Designed by Manas Agrawal</p>
           </div>

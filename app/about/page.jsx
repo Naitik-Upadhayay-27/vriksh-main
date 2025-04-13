@@ -128,11 +128,11 @@ export default function AboutPage() {
       </div>
 
       <main className="w-full px-0 py-4">
-        <section className="max-w-4xl mx-auto mb-16 text-[#080a0f] mt-12">
-          <h2 className="text-3xl font-bold mb-6 text-center">
+        <section className="max-w-6xl mx-auto mb-16 text-[#080a0f] mt-12 px-4 sm:px-4 md:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center">
             Your Trusted Gateway to Ahmedabad's Finest Homes
           </h2>
-          <p className="text-center mb-6 text-[#080a0f]">
+          <p className="text-sm sm:text-base text-center mb-4 sm:mb-6 text-[#080a0f]">
             Mindestate is more than just a real estate provider—it's your
             trusted partner in discovering Ahmedabad's most promising
             under-construction residential projects. We bring you exclusive
@@ -140,7 +140,7 @@ export default function AboutPage() {
             invest in a future-ready home. With deep market expertise,
             personalized guidance, and a data-driven approach.
           </p>
-          <p className="text-center text-[#1e2532]">
+          <p className="text-sm sm:text-base text-center text-[#1e2532]">
             We transform the complex world of real estate into a seamless,
             transparent experience. From selecting the perfect property to
             understanding the city's evolving infrastructure, we empower you

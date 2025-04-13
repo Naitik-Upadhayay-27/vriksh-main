@@ -220,7 +220,9 @@ function PropertyCard({
               Get a Call
             </button>
           </div>
-          <div className="text-xs text-[#666666] ">Added: {date}</div>
+          <div className="text-xs text-[#666666] mt-4 sm:mt-5">
+            Added: {date}
+          </div>
         </div>
       </div>
     </Link>
@@ -229,7 +231,7 @@ function PropertyCard({
 
 export default function PropertiesListFullwidth() {
   return (
-    <div className="container mx-auto px-4 sm:px-6 py-6">
+    <div className="container mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
       <div className="flex items-center text-sm mb-2">
         <Link href="/" className="text-[#333333] hover:underline">
           Home
@@ -237,14 +239,14 @@ export default function PropertiesListFullwidth() {
         <span className="mx-2 text-[#808080]">›</span>
         <span className="text-[#BB9627]">Properties List Fullwidth</span>
       </div>
-      <h1 className="text-2xl font-bold text-[#1d1d1f] mb-6">
+      <h1 className="text-xl sm:text-2xl font-bold text-[#1d1d1f] mb-4 sm:mb-6">
         Properties List Fullwidth
       </h1>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 sm:mb-6">
         <div className="text-sm text-[#666666]">
           1 to 6 out of 10 properties
         </div>
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-[#666666]">Sort By:</span>
             <button className="flex items-center text-sm text-[#333333] font-medium">
@@ -261,7 +263,7 @@ export default function PropertiesListFullwidth() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6">
         {properties.map((property) => (
           <PropertyCard
             key={property.id}
@@ -283,7 +285,7 @@ export default function PropertiesListFullwidth() {
           />
         ))}
       </div>
-      <div className="flex justify-center mt-8">
+      <div className="flex justify-center mt-6 sm:mt-8">
         <div className="flex gap-2">
           <button className="w-8 h-8 flex items-center justify-center rounded-full bg-[#BB9627] text-white text-sm">
             1

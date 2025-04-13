@@ -22,6 +22,14 @@ import { Button } from "@/components/ui/button";
 export function PropertyDetailComplete({ property }) {
   const [activeTab, setActiveTab] = useState("all");
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [activePlace, setActivePlace] = useState("Hospital");
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+
+  // Minimum distance for a swipe
+  const minSwipeDistance = 50;
 
   const similarProperties = [
     {
@@ -78,14 +86,49 @@ export function PropertyDetailComplete({ property }) {
     );
   };
 
+  const handleTouchStart = (e) => {
+    setTouchStart(e.touches[0].clientX);
+    setTouchEnd(e.touches[0].clientX);
+    setIsDragging(true);
+    setDragOffset(0);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    setTouchEnd(e.touches[0].clientX);
+    const currentOffset = touchStart - e.touches[0].clientX;
+    setDragOffset(currentOffset);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && currentSlide < filteredProperties.length - 1) {
+      handleNextSlide();
+    } else if (isRightSwipe && currentSlide > 0) {
+      handlePrevSlide();
+    } else {
+      // Reset to current slide if swipe wasn't long enough
+      setDragOffset(0);
+    }
+
+    setIsDragging(false);
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
   return (
     <div className="flex flex-col text-black w-[114%] ml-[-7%] p-0 m-0 overflow-hidden">
       {/* Image Gallery Section */}
-      <div className="w-full p-0 mb-14">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-2">
-          {/* Main Image - Takes more width (9/12 columns) */}
+      <div className="w-full p-0 mb-6 md:mb-14">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-2 px-4 md:px-0">
+          {/* Main Image */}
           <div className="md:col-span-9 relative group">
-            <div className="relative w-full h-[400px] md:h-[520px] overflow-hidden rounded-xl">
+            <div className="relative w-full h-[240px] sm:h-[400px] md:h-[520px] overflow-hidden rounded-t-xl md:rounded-xl">
               <Image
                 src={property.image}
                 alt={property.title}
@@ -113,8 +156,34 @@ export function PropertyDetailComplete({ property }) {
             </div>
           </div>
 
-          {/* Thumbnail Gallery - Takes 3/12 columns */}
-          <div className="md:col-span-3 grid grid-cols-1 gap-2">
+          {/* Mobile Thumbnail Gallery */}
+          <div className="block md:hidden">
+            <div className="grid grid-cols-5 gap-1">
+              {[1, 2, 3, 4, 5].map((index) => (
+                <div
+                  key={index}
+                  className="relative w-full h-[80px] overflow-hidden"
+                >
+                  <Image
+                    src={index === 5 ? "/about2.png" : "/about1.png"}
+                    alt={`Thumbnail ${index}`}
+                    fill
+                    className="object-cover"
+                  />
+                  {index === 5 && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                      <span className="text-white text-sm font-medium">
+                        +10
+                      </span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Thumbnail Gallery */}
+          <div className="hidden md:grid md:col-span-3 grid-cols-1 gap-2">
             <div className="relative w-full h-[258px] overflow-hidden rounded-xl">
               <Image
                 src="/about1.png"
@@ -140,113 +209,130 @@ export function PropertyDetailComplete({ property }) {
         </div>
       </div>
 
-      <div className="grid px-8 grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid px-0 sm:px-8 grid-cols-1 md:grid-cols-3 gap-8">
         {/* Main Content */}
-        <div className="md:col-span-2 space-y-8">
+        <div className="md:col-span-2 space-y-4 sm:space-y-8">
           {/* Title and Basic Info */}
-          <div className="bg-white p-6 -ml-6 rounded-lg ">
-            <Badge className="bg-[#BB9627]/10 text-[#BB9627] hover:bg-[#183E70]/20 rounded-sm">
-              {property.type.split(" ")[1].toUpperCase()}
-            </Badge>
-            <div className="flex flex-wrap justify-between items-start mt-2">
-              <div>
-                <h1 className="text-2xl font-bold text-black">
+          <div className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+              <div className="flex-1">
+                <h1 className="text-xl sm:text-2xl font-bold text-black mb-2">
                   {property.title}
                 </h1>
-                <div className="flex items-center text-black mt-1">
+                <div className="flex items-center text-black">
                   <MapPin className="h-4 w-4 mr-1" />
-                  <span>{property.location}</span>
+                  <span className="text-sm sm:text-base text-gray-600">
+                    {property.location}
+                  </span>
                 </div>
-                <div className="text-sm text-black mt-1">
+                <div className="text-xs sm:text-sm text-gray-500 mt-1">
                   (100 People Recommended)
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-xl font-bold text-[#BB9627]">
+              <div className="mt-4 sm:mt-0">
+                <div className="text-2xl sm:text-xl font-bold text-[#BB9627]">
                   {property.price}
                 </div>
-                <div className="text-sm text-black">
+                <div className="text-sm text-gray-500">
                   {property.priceType
                     ? `(${property.priceType})`
                     : "(Price Only)"}
                 </div>
-                <Button
-                  size="sm"
-                  className="mt-2 bg-[#BB9627] hover:bg-[#BB9627]/80"
-                >
-                  <span className="text-xs">Contact</span>
-                </Button>
+                <div className="flex items-center gap-2 mt-2">
+                  <Badge className="bg-[#BB9627]/10 text-[#BB9627] hover:bg-[#183E70]/20 rounded-sm">
+                    {property.type.split(" ")[1].toUpperCase()}
+                  </Badge>
+                  <Button
+                    size="sm"
+                    className="bg-[#BB9627] hover:bg-[#BB9627]/80"
+                  >
+                    <span className="text-xs">Available</span>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-          {/* Offers */}
-          <div className="bg-white p-6 rounded-lg -mt-12 space-y-2">
+
+          {/* Special Price and Offers */}
+          <div className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg space-y-3 order-1 sm:order-none">
             <div className="flex items-center gap-2">
-              <Tag className="h-4 w-4 text-[#BB9627] mr-1" />
-              <span className="font-medium text-black">Special Price</span>
-              <span className="text-black">
+              <Tag className="h-4 w-4 text-[#BB9627]" />
+              <span className="text-sm font-medium text-black">
+                Special Price
+              </span>
+              <span className="text-sm text-gray-600">
                 Get extra 15% off (price inclusive of discount)
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Tag className="h-4 w-4 text-[#BB9627] mr-1" />
-              <span className="font-medium text-black">Bank Offer</span>
-              <span className="text-black">
+              <Tag className="h-4 w-4 text-[#BB9627]" />
+              <span className="text-sm font-medium text-black">Bank Offer</span>
+              <span className="text-sm text-gray-600">
                 10% instant discount on VISA Cards
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Tag className="h-4 w-4 text-[#BB9627] mr-1" />
-              <span className="font-medium text-black">
+              <Tag className="h-4 w-4 text-[#BB9627]" />
+              <span className="text-sm font-medium text-black">
                 No cost EMI $149/month.
               </span>
-              <span className="text-black">Standard EMI also available</span>
+              <span className="text-sm text-gray-600">
+                Standard EMI also available
+              </span>
             </div>
           </div>
-          {/* Action Buttons */}
-          <div className="flex items-center gap-4">
-            <div className="p-2 bg-[#F8F5F0] rounded-lg hover:bg-[#BB9627]/80 group transition-colors duration-300">
-              <Download className="h-5 w-5 text-[#BB9627] group-hover:text-white transition-colors duration-300" />
-            </div>
-            <Button className="rounded-full px-15 shadow-sm hover:shadow bg-[#BB9627] hover:bg-[#BB9627]/80 text-white">
+
+          {/* Download Button */}
+          <div className="flex mx-4 sm:mx-0 items-center justify-center sm:justify-start gap-4 mt-4 order-2 sm:order-none">
+            <Button className="w-full sm:w-auto rounded-full px-15 shadow-sm hover:shadow bg-[#BB9627] hover:bg-[#BB9627]/80 text-white">
               Download
             </Button>
           </div>
+
           {/* Property Specs */}
-          <div className="grid grid-cols-3 gap-4 border-t border-gray-200 py-6 my-6">
-            <div className="flex items-center gap-2">
-              <div className="text-sm text-gray-600">Rooms:</div>
-              <div className="text-base text-gray-700">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 border-t border-gray-200 py-4 sm:py-6 my-4 sm:my-6 ml-8 sm:ml-0">
+            <div className="flex flex-col gap-1">
+              <div className="text-xs sm:text-sm text-gray-600">Rooms:</div>
+              <div className="text-sm sm:text-base font-medium text-gray-700">
                 {property.beds ? property.beds + 2 : "N/A"}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="text-sm text-gray-600">Beds:</div>
-              <div className="text-base text-gray-700">
+            <div className="flex flex-col gap-1">
+              <div className="text-xs sm:text-sm text-gray-600">Beds:</div>
+              <div className="text-sm sm:text-base font-medium text-gray-700">
                 {property.beds || "N/A"}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="text-sm text-gray-600">Area:</div>
-              <div className="text-base text-gray-700">{property.sqft}</div>
+            <div className="flex flex-col gap-1">
+              <div className="text-xs sm:text-sm text-gray-600">Area:</div>
+              <div className="text-sm sm:text-base font-medium text-gray-700">
+                {property.sqft}
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="text-sm text-gray-600">Baths:</div>
-              <div className="text-base text-gray-700">
+            <div className="flex flex-col gap-1">
+              <div className="text-xs sm:text-sm text-gray-600">Baths:</div>
+              <div className="text-sm sm:text-base font-medium text-gray-700">
                 {property.baths || "N/A"}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="text-sm text-gray-600">Car Garage:</div>
-              <div className="text-base text-gray-700">Yes (5 Capacity)</div>
+            <div className="flex flex-col gap-1">
+              <div className="text-xs sm:text-sm text-gray-600">
+                Car Garage:
+              </div>
+              <div className="text-sm sm:text-base font-medium text-gray-700">
+                Yes (5 Capacity)
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="text-sm text-gray-600">Swimming:</div>
-              <div className="text-base text-gray-700">Yes (1 Large)</div>
+            <div className="flex flex-col gap-1">
+              <div className="text-xs sm:text-sm text-gray-600">Swimming:</div>
+              <div className="text-sm sm:text-base font-medium text-gray-700">
+                Yes (1 Large)
+              </div>
             </div>
           </div>
+
           {/* Description */}
-          <div className="bg-white  px-6 pl-0 rounded-lg space-y-4">
+          <div className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg space-y-4">
             <h2 className="text-xl font-bold text-black">Description</h2>
             <p className="text-gray-600 text-sm leading-relaxed">
               Maecenas egestas quam et volutpat bibendum metus vulputate platea
@@ -260,7 +346,7 @@ export function PropertyDetailComplete({ property }) {
             </p>
           </div>
           {/* Highlights */}
-          <div className="bg-white mb-15 px-6 pl-0 rounded-lg">
+          <div className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 mb-15 rounded-lg">
             <div className="flex gap-8">
               <h3 className="text-base font-sm text-zinc-600 w-32">
                 Highlights:
@@ -296,12 +382,14 @@ export function PropertyDetailComplete({ property }) {
             </div>
           </div>
           {/* More Information */}
-          <section className="bg-white -ml-8 px-6 rounded-lg mb-8">
+          <section className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg mb-8">
             <h2 className="text-xl font-semibold mb-6">More Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4">
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">Age :</span>
-                <span className="inline-block ml-4 text-gray-500">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                  Age :
+                </span>
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
                   {property.buildYear
                     ? `${
                         new Date().getFullYear() - parseInt(property.buildYear)
@@ -309,101 +397,117 @@ export function PropertyDetailComplete({ property }) {
                     : "N/A"}
                 </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">Type :</span>
-                <span className="inline-block ml-4 text-gray-500">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                  Type :
+                </span>
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
                   {property.type.split(" ")[1]}
                 </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Installment Facility :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">Yes</span>
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
+                  Yes
+                </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Insurance :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">Yes</span>
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
+                  Yes
+                </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   3rd Party :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">No</span>
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
+                  No
+                </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Swimming Pool :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">Yes</span>
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
+                  Yes
+                </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Garden & Trail :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
                   2400sqft
                 </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Total Floor :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
                   17 Floor
                 </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Security :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
                   3 Step Security
                 </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Elevator :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">2 Large</span>
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
+                  2 Large
+                </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Driving Capacity :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
                   20 People
                 </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">Exit :</span>
-                <span className="inline-block -ml-1 text-gray-500">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                  Exit :
+                </span>
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
                   3 Exit Gate
                 </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Fire Place :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">Yes</span>
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
+                  Yes
+                </span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-[#6d7175] inline-block w-40">
+              <div className="flex flex-row sm:flex-row items-center sm:items-center">
+                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Heating System :
                 </span>
-                <span className="inline-block ml-4 text-gray-500">
+                <span className="text-base sm:text-sm text-gray-500 ml-2">
                   Floor Heating
                 </span>
               </div>
             </div>
           </section>
           {/* Property Summary */}
-          <section className="bg-white p-6 -ml-8 rounded-lg mb-8">
+          <section className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg mb-8">
             <h2 className="text-xl font-semibold mb-6">Property Summary</h2>
-            <div className="grid grid-cols-2 gap-y-0">
-              <div className="flex items-center whitespace-nowrap border-t border-b border-gray-200 py-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-0">
+              <div className="flex items-center whitespace-nowrap border-t sm:border-t border-b sm:border-b border-gray-200 py-4">
                 <span className="text-[#6d7175] inline-block w-32">
                   Property Id :
                 </span>
@@ -411,7 +515,7 @@ export function PropertyDetailComplete({ property }) {
                   LA{property.id}8227
                 </span>
               </div>
-              <div className="flex items-center whitespace-nowrap border-t border-b border-gray-200 py-4">
+              <div className="flex items-center whitespace-nowrap sm:border-t border-b sm:border-b border-gray-200 py-4">
                 <span className="text-[#6d7175] inline-block w-32">
                   Listing Type :
                 </span>
@@ -484,7 +588,7 @@ export function PropertyDetailComplete({ property }) {
             </div>
           </section>
           {/* Features */}
-          <section className="bg-white p-6 -ml-8 rounded-lg  mb-8">
+          <section className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg mb-8">
             <h2 className="text-xl font-semibold mb-6">Property Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4">
               {[
@@ -521,33 +625,69 @@ export function PropertyDetailComplete({ property }) {
             </div>
           </section>
           {/* Floor Plans */}
-          <section className="bg-white py-6 -ml-8 rounded-lg">
-            <h2 className="text-xl font-semibold mb-6 px-6">Floor Plans</h2>
-            <div className="px-6">
-              <div className="space-y-2">
-                <div className="flex items-center py-3 px-4 bg-[#F8F5F0]  rounded-md transition-colors duration-300">
-                  <span className="text-zinc-800">
-                    Floor Plans [ 4200 sqft ]
-                  </span>
-                </div>
-                <div className="flex items-center py-3 px-4 bg-[#F8F5F0] rounded-md transition-colors duration-300">
-                  <span className="text-zinc-800">
-                    Graps Plans [ 5200 sqft ]
-                  </span>
-                </div>
-                <div className="flex items-center py-3 px-4 bg-[#F8F5F0]  rounded-md transition-colors duration-300">
-                  <span className="text-zinc-800">
-                    Garden Plans [ 4200 sqft ]
-                  </span>
-                </div>
+          <section className="bg-white mx-4 sm:mx-0 py-6 px-4 sm:px-6 rounded-lg">
+            <h2 className="text-xl font-semibold mb-6">Floor Plans</h2>
+            <div className="space-y-2">
+              <div className="flex items-center py-3 px-4 bg-[#F8F5F0]  rounded-md transition-colors duration-300">
+                <span className="text-zinc-800">Floor Plans [ 4200 sqft ]</span>
+              </div>
+              <div className="flex items-center py-3 px-4 bg-[#F8F5F0] rounded-md transition-colors duration-300">
+                <span className="text-zinc-800">Graps Plans [ 5200 sqft ]</span>
+              </div>
+              <div className="flex items-center py-3 px-4 bg-[#F8F5F0]  rounded-md transition-colors duration-300">
+                <span className="text-zinc-800">
+                  Garden Plans [ 4200 sqft ]
+                </span>
               </div>
             </div>
           </section>
           {/* Nearby Places */}
-          <section className="bg-white py-6 -ml-8 rounded-lg">
-            <h2 className="text-xl font-semibold mb-6 px-6">Nearby Places</h2>
+          <section className="bg-white mx-4 sm:mx-0 py-6 px-4 sm:px-6 rounded-lg">
+            <h2 className="text-xl font-semibold mb-6">Nearby Places</h2>
             <div className="mb-6">
-              <div className="flex px-6">
+              <div className="grid grid-cols-4 gap-2 sm:hidden">
+                <button
+                  onClick={() => setActivePlace("Hospital")}
+                  className={`w-full px-2 py-2 font-medium text-xs whitespace-nowrap rounded-full ${
+                    activePlace === "Hospital"
+                      ? "text-[#BB9627] bg-[#BB9627]/10"
+                      : "text-gray-500 bg-gray-100"
+                  }`}
+                >
+                  Hospital
+                </button>
+                <button
+                  onClick={() => setActivePlace("Shopping")}
+                  className={`w-full px-2 py-2 font-medium text-xs whitespace-nowrap rounded-full ${
+                    activePlace === "Shopping"
+                      ? "text-[#BB9627] bg-[#BB9627]/10"
+                      : "text-gray-500 bg-gray-100"
+                  }`}
+                >
+                  Shopping
+                </button>
+                <button
+                  onClick={() => setActivePlace("School")}
+                  className={`w-full px-2 py-2 font-medium text-xs whitespace-nowrap rounded-full ${
+                    activePlace === "School"
+                      ? "text-[#BB9627] bg-[#BB9627]/10"
+                      : "text-gray-500 bg-gray-100"
+                  }`}
+                >
+                  School
+                </button>
+                <button
+                  onClick={() => setActivePlace("Restaurant")}
+                  className={`w-full px-2 py-2 font-medium text-xs whitespace-nowrap rounded-full ${
+                    activePlace === "Restaurant"
+                      ? "text-[#BB9627] bg-[#BB9627]/10"
+                      : "text-gray-500 bg-gray-100"
+                  }`}
+                >
+                  Restaurant
+                </button>
+              </div>
+              <div className="hidden sm:flex px-6">
                 <button className="px-6 py-2 text-[#BB9627] border-b-2 border-[#BB9627] font-medium transition-colors duration-300">
                   Hospital
                 </button>
@@ -562,8 +702,8 @@ export function PropertyDetailComplete({ property }) {
                 </button>
               </div>
             </div>
-            <div className="px-6">
-              <div className="grid grid-cols-12 mb-4">
+            <div className="px-0 sm:px-6">
+              <div className="hidden sm:grid grid-cols-12 mb-4">
                 <div className="col-span-5 text-sm font-medium text-[#6d7175]">
                   Name
                 </div>
@@ -574,33 +714,54 @@ export function PropertyDetailComplete({ property }) {
                   Type
                 </div>
               </div>
-              <div className="grid grid-cols-12 py-3 border-b border-gray-100 hover:bg-gray-50">
-                <div className="col-span-5 text-gray-500">
+              <div className="flex flex-col sm:grid sm:grid-cols-12 py-3 border-b border-gray-100">
+                <div className="text-gray-900 sm:text-gray-500 font-medium sm:font-normal mb-1 sm:mb-0 sm:col-span-5">
                   Massachusetts General Hospital
                 </div>
-                <div className="col-span-3 text-gray-500">23.7 km</div>
-                <div className="col-span-4 text-gray-500">Medical College</div>
+                <div className="text-gray-500 text-sm sm:text-base mb-1 sm:mb-0 sm:col-span-3">
+                  23.7 km
+                </div>
+                <div className="text-gray-500 text-sm sm:text-base sm:col-span-4">
+                  Medical College
+                </div>
               </div>
-              <div className="grid grid-cols-12 py-3 border-b border-gray-100 hover:bg-gray-50">
-                <div className="col-span-5 text-gray-500">
+              <div className="flex flex-col sm:grid sm:grid-cols-12 py-3 border-b border-gray-100">
+                <div className="text-gray-900 sm:text-gray-500 font-medium sm:font-normal mb-1 sm:mb-0 sm:col-span-5">
                   Langone Medical Center
                 </div>
-                <div className="col-span-3 text-gray-500">13.2 km</div>
-                <div className="col-span-4 text-gray-500">Hart Hospital</div>
+                <div className="text-gray-500 text-sm sm:text-base mb-1 sm:mb-0 sm:col-span-3">
+                  13.2 km
+                </div>
+                <div className="text-gray-500 text-sm sm:text-base sm:col-span-4">
+                  Hart Hospital
+                </div>
               </div>
-              <div className="grid grid-cols-12 py-3 border-b border-gray-100 hover:bg-gray-50">
-                <div className="col-span-5 text-gray-500">
+              <div className="flex flex-col sm:grid sm:grid-cols-12 py-3 border-b border-gray-100">
+                <div className="text-gray-900 sm:text-gray-500 font-medium sm:font-normal mb-1 sm:mb-0 sm:col-span-5">
                   Mount Sinai Hospital
                 </div>
-                <div className="col-span-3 text-gray-500">58.0 km</div>
-                <div className="col-span-4 text-gray-500">Eye Hospital</div>
+                <div className="text-gray-500 text-sm sm:text-base mb-1 sm:mb-0 sm:col-span-3">
+                  58.0 km
+                </div>
+                <div className="text-gray-500 text-sm sm:text-base sm:col-span-4">
+                  Eye Hospital
+                </div>
               </div>
             </div>
+            <style jsx>{`
+              .hide-scrollbar::-webkit-scrollbar {
+                display: none;
+              }
+              .hide-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+              }
+            `}</style>
           </section>
         </div>
 
         {/* Sidebar */}
-        <div className="md:col-span-1 space-y-8">
+        <div className="md:col-span-1 space-y-8 mx-4 sm:mx-0">
           {/* Agent Info */}
           <div className="border border-gray-200 shadow-sm rounded-lg p-6 space-y-6 bg-white">
             <div className="space-y-4">
@@ -778,13 +939,13 @@ export function PropertyDetailComplete({ property }) {
           width: "100vw",
         }}
       >
-        <div className="max-w-[2000px] mx-auto px-8 relative">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6 ml-10">
+        <div className="max-w-[2000px] mx-auto px-4 sm:px-8 relative">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6 ml-2 sm:ml-10">
             Similar Properties
           </h2>
 
           {/* Tabs */}
-          <div className="flex border-b border-gray-200 mb-8 justify-start ml-10">
+          <div className="flex border-b border-gray-200 mb-8 justify-start ml-2 sm:ml-10">
             <button
               onClick={() => setActiveTab("all")}
               className={`text-sm px-1 pb-4 border-b-2 ${
@@ -838,23 +999,130 @@ export function PropertyDetailComplete({ property }) {
             </button>
           </div>
 
-          {/* Navigation Arrows */}
+          {/* Navigation Arrows - Desktop */}
           <button
             onClick={handlePrevSlide}
-            className="absolute left-16 top-1/2 p-4 rounded-md border border-gray-200 bg-white shadow-lg hover:bg-gray-50 transition-colors transform -translate-y-1/2 z-10"
+            className="hidden sm:block absolute left-16 top-1/2 p-4 rounded-md border border-gray-200 bg-white shadow-lg hover:bg-gray-50 transition-colors transform -translate-y-1/2 z-10"
           >
             <ChevronLeft className="h-6 w-6 text-gray-600" />
           </button>
 
           <button
             onClick={handleNextSlide}
-            className="absolute right-16 top-1/2 p-4 rounded-md border border-gray-200 bg-white shadow-lg hover:bg-gray-50 transition-colors transform -translate-y-1/2 z-10"
+            className="hidden sm:block absolute right-16 top-1/2 p-4 rounded-md border border-gray-200 bg-white shadow-lg hover:bg-gray-50 transition-colors transform -translate-y-1/2 z-10"
           >
             <ChevronRight className="h-6 w-6 text-gray-600" />
           </button>
 
-          {/* Property Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3  justify-items-center">
+          {/* Mobile Carousel */}
+          <div className="relative block sm:hidden">
+            <div
+              className="overflow-hidden touch-pan-x"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onTouchCancel={handleTouchEnd}
+            >
+              {/* Navigation Buttons - Centered */}
+              <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 flex justify-between px-2 z-10 pointer-events-none">
+                <button
+                  onClick={handlePrevSlide}
+                  className="p-2 rounded-full bg-white border border-gray-200 shadow-md pointer-events-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={currentSlide === 0}
+                >
+                  <ChevronLeft className="h-5 w-5 text-gray-600" />
+                </button>
+                <button
+                  onClick={handleNextSlide}
+                  className="p-2 rounded-full bg-white border border-gray-200 shadow-md pointer-events-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={currentSlide === filteredProperties.length - 1}
+                >
+                  <ChevronRight className="h-5 w-5 text-gray-600" />
+                </button>
+              </div>
+
+              <div
+                className={`flex transition-transform ${
+                  isDragging ? "duration-0" : "duration-300"
+                } ease-out will-change-transform`}
+                style={{
+                  transform: `translateX(calc(-${currentSlide * 100}% - ${
+                    isDragging ? dragOffset : 0
+                  }px))`,
+                }}
+              >
+                {filteredProperties.map((prop) => (
+                  <div key={prop.id} className="w-full flex-shrink-0 px-2">
+                    <div className="bg-white rounded-lg overflow-hidden border border-gray-100 transform transition-transform duration-300 hover:scale-[1.02]">
+                      <div className="relative h-64">
+                        <Image
+                          src={prop.image}
+                          alt={prop.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="p-6">
+                        <h3 className="font-semibold text-gray-900 text-lg">
+                          {prop.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-2">
+                          {prop.location}
+                        </p>
+                        <div className="flex items-center gap-6 mt-4">
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm text-gray-600">
+                              {prop.beds}
+                            </span>
+                            <span className="text-sm text-gray-500">bed</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm text-gray-600">
+                              {prop.baths}
+                            </span>
+                            <span className="text-sm text-gray-500">bath</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm text-gray-600">
+                              {prop.sqft}
+                            </span>
+                            <span className="text-sm text-gray-500">sq ft</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between mt-6">
+                          <span className="text-[#BB9632] font-semibold text-lg">
+                            {prop.price}
+                          </span>
+                          <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dots Indicator */}
+            <div className="flex justify-center gap-2 mt-4">
+              {filteredProperties.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 transform ${
+                    currentSlide === index
+                      ? "bg-[#BB9632] scale-125"
+                      : "bg-gray-300 hover:bg-gray-400"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Grid */}
+          <div className="hidden sm:grid sm:grid-cols-3 justify-items-center">
             {filteredProperties.map((prop) => (
               <div
                 key={prop.id}

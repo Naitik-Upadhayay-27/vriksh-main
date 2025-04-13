@@ -57,7 +57,7 @@ const FAQSection = () => {
   };
 
   return (
-    <div className="w-full py-4 px-6 text-black bg-[#FFFAF4]">
+    <div className="w-full py-4 px-6 text-black bg-[#FFFAF4] mb-12">
       <h2 className="text-3xl font-semibold mb-3 text-left px-2">
         Wondering How This Works
       </h2>

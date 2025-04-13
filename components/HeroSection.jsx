@@ -160,6 +160,7 @@ export default function HeroSection() {
   const [isClient, setIsClient] = useState(false);
   const [openQuestion, setOpenQuestion] = useState("where");
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentArticleSlide, setCurrentArticleSlide] = useState(0);
 
   useEffect(() => {
     setIsClient(true);
@@ -202,6 +203,18 @@ export default function HeroSection() {
   const handleNextSlide = () => {
     setCurrentSlide((prevSlide) =>
       prevSlide === filteredProperties.length - 2 ? 0 : prevSlide + 1
+    );
+  };
+
+  const handlePrevArticleSlide = () => {
+    setCurrentArticleSlide((prevSlide) =>
+      prevSlide === 0 ? trendingArticles.length - 1 : prevSlide - 1
+    );
+  };
+
+  const handleNextArticleSlide = () => {
+    setCurrentArticleSlide((prevSlide) =>
+      prevSlide === trendingArticles.length - 1 ? 0 : prevSlide + 1
     );
   };
 
@@ -323,7 +336,7 @@ export default function HeroSection() {
 
             {/* Search Button */}
             <div className="w-full sm:w-auto py-3 px-4 flex justify-center">
-              <button className="bg-[#BB9632] text-white rounded-lg w-12 h-12 flex items-center justify-center transition-colors duration-300 shadow-md hover:bg-[#A68529]">
+              <button className="w-full sm:w-12 h-12 bg-[#BB9632] text-white rounded-lg flex items-center justify-center transition-colors duration-300 shadow-md hover:bg-[#A68529]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-8 w-8"
@@ -350,7 +363,7 @@ export default function HeroSection() {
       <section className="py-16 px-4 ">
         <div className="container mx-auto py-8 px-4 sm:px-6">
           <div className="flex flex-col  justify-between items-left mb-8">
-            <h1 className="text-2xl md:text-5xl mb-5 ml-8 font-bold text-gray-900">
+            <h1 className="text-2xl md:text-5xl mb-5 font-bold text-gray-900">
               Our featured exclusives
             </h1>
             <div className="hidden mt-8 md:flex md:flex-row md:items-center md:space-x-6 border-b border-gray-200 relative">
@@ -715,60 +728,222 @@ export default function HeroSection() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1  md:grid-cols-3 gap-6 mb-12">
-            {trendingArticles.map((article) => (
+          <div className="relative">
+            {/* Mobile Carousel */}
+            <div className="md:hidden overflow-hidden">
               <div
-                key={article.id}
-                className="bg-[#FFFAF4] rounded-lg overflow-hidden shadow-md transition-transform duration-300  hover:shadow-lg"
+                className="flex transition-transform duration-300 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentArticleSlide * 100}%)`,
+                }}
               >
-                <div className="relative h-64 w-full overflow-hidden">
-                  <div className="w-full h-full transform transition-transform duration-300 hover:scale-95">
-                    <Image
-                      src={article.image}
-                      alt={article.title}
-                      fill
-                      className="object-cover"
-                    />
+                {trendingArticles.map((article) => (
+                  <div key={article.id} className="w-full flex-shrink-0 px-4">
+                    <div className="bg-[#FFFAF4] rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:shadow-lg">
+                      <div className="relative h-64 w-full overflow-hidden">
+                        <div className="w-full h-full transform transition-transform duration-300 hover:scale-95">
+                          <Image
+                            src={article.image}
+                            alt={article.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      </div>
+                      <div className="p-5">
+                        <h3 className="font-bold text-gray-800 text-lg mb-3 line-clamp-2">
+                          {article.title}
+                        </h3>
+                        <Link
+                          href={article.link}
+                          className="inline-flex items-center text-[#BB9632] font-medium hover:text-[#183E70] transition-colors"
+                        >
+                          Read More
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 ml-1"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop Grid */}
+            <div className="hidden md:grid grid-cols-3 gap-6">
+              {trendingArticles.map((article) => (
+                <div
+                  key={article.id}
+                  className="bg-[#FFFAF4] rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:shadow-lg"
+                >
+                  <div className="relative h-64 w-full overflow-hidden">
+                    <div className="w-full h-full transform transition-transform duration-300 hover:scale-95">
+                      <Image
+                        src={article.image}
+                        alt={article.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-bold text-gray-800 text-lg mb-3 line-clamp-2">
+                      {article.title}
+                    </h3>
+                    <Link
+                      href={article.link}
+                      className="inline-flex items-center text-[#BB9632] font-medium hover:text-[#183E70] transition-colors"
+                    >
+                      Read More
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 ml-1"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </Link>
                   </div>
                 </div>
-                <div className="p-5">
-                  <h3 className="font-bold text-gray-800 text-lg mb-3 line-clamp-2">
-                    {article.title}
-                  </h3>
-                  <Link
-                    href={article.link}
-                    className="inline-flex items-center text-[#BB9632] font-medium hover:text-[#183E70] transition-colors"
-                  >
-                    Read More
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 ml-1"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Mobile Navigation Buttons */}
+            <div className="md:hidden flex justify-between items-center absolute top-1/2 left-0 right-0 -translate-y-1/2 px-4">
+              <button
+                onClick={handlePrevArticleSlide}
+                className="bg-white/80 text-[#BB9632] p-2 rounded-full shadow-lg hover:bg-white transition-colors"
+                aria-label="Previous article"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={handleNextArticleSlide}
+                className="bg-white/80 text-[#BB9632] p-2 rounded-full shadow-lg hover:bg-white transition-colors"
+                aria-label="Next article"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Mobile carousel indicators */}
+            <div className="md:hidden flex justify-center mt-4 space-x-1.5">
+              {trendingArticles.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 ${
+                    currentArticleSlide === index
+                      ? "bg-[#BB9632] scale-125"
+                      : "bg-gray-300"
+                  }`}
+                  onClick={() => setCurrentArticleSlide(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Contact section */}
-      <section className="py-16 pb-28 px-4 relative">
+      <section className="py-16 pb-28 px-0 relative mb-8">
         <div className="container flex flex-col mx-auto px-4 md:px-6 lg:px-8">
-          <h2 className="text-xl md:text-2xl">Get started</h2>
-          <h1 className="text-2xl md:text-3xl lg:text-4xl mt-4 md:mt-8 font-semibold">
-            Get in touch with us. We're here to assist you.
-          </h1>
-          {/* Social Media Buttons */}
-          <div className="absolute right-8 top-1/3 flex flex-col gap-3">
+          <div className="flex flex-col md:flex-row justify-between items-start">
+            {/* Social Media Buttons - Mobile Only */}
+            <div className="md:hidden flex gap-3 self-end -mb-2 w-full justify-end">
+              <a
+                href="#"
+                className="w-12 sm:w-14 md:w-16 h-10 sm:h-12 md:h-14 rounded-full bg-white flex items-center justify-center text-[#BB9632] hover:bg-gray-100 transition-colors border border-[#BB9632] shadow-md hover:shadow-lg"
+                aria-label="Instagram"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </a>
+              <a
+                href="#"
+                className="w-12 sm:w-14 md:w-16 h-10 sm:h-12 md:h-14 rounded-full bg-white flex items-center justify-center text-[#BB9632] hover:bg-gray-100 transition-colors border border-[#BB9632] shadow-md hover:shadow-lg"
+                aria-label="Facebook"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
+                >
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                </svg>
+              </a>
+            </div>
+            <div className="w-full md:w-auto">
+              <h2 className="text-xl md:text-2xl">Get started</h2>
+              <h1 className="text-2xl md:text-3xl lg:text-4xl mt-4 md:mt-8 font-semibold">
+                Get in touch with us. We're here to assist you.
+              </h1>
+            </div>
+          </div>
+          {/* Social Media Buttons - Desktop Only */}
+          <div className="hidden md:flex absolute right-8 top-1/3 flex-col gap-3">
             <a
               href="#"
               className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#BB9632] hover:bg-gray-100 transition-colors border border-[#BB9632] shadow-md hover:shadow-lg"
@@ -810,6 +985,7 @@ export default function HeroSection() {
               </svg>
             </a>
           </div>
+          {/* structure of form  */}
           <div className="flex flex-col md:flex-row justify-between gap-3 mt-5">
             <div className="w-full md:w-1/3 py-3 md:py-5 px-4 border-b border-gray-400">
               <input
@@ -843,7 +1019,7 @@ export default function HeroSection() {
           <div className="mt-6 md:mt-8">
             <button
               type="submit"
-              className="w-40 md:w-auto bg-[#BB9632] text-white px-6 py-3 rounded-3xl hover:bg-[#A68529] transition-colors font-medium"
+              className="w-[90%] md:w-auto whitespace-nowrap bg-[#BB9632] text-white px-6 py-3 rounded-3xl hover:bg-[#A68529] transition-colors font-medium mx-auto block"
             >
               Leave us a Message <span className="ml-3">→</span>
             </button>

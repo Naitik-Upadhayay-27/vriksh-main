@@ -2,8 +2,8 @@ import Image from "next/image"
 
 export default function RealEstateHero() {
     return (
-        <div className="w-[100%]  p-6 md:p-12 bg-[#FFFAF4]">
-            <div className="flex flex-col md:flex-row gap-30 items-center">
+        <div className="w-[100%] p-4 md:p-12 bg-[#FFFAF4]">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-30 items-center">
                 {/* Left side - Image */}
                 <div className="w-full md:w-[50%]">
                     <div className="relative rounded-xl overflow-hidden aspect-[4/3] shadow-lg group">
