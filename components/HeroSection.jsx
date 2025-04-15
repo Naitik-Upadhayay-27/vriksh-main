@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Lenis from "lenis";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FeaturedProperties } from "./feature-propertise";
 
 const PropertyCard = ({ property }) => {
@@ -42,6 +42,38 @@ const PropertyCard = ({ property }) => {
 };
 
 export default function HeroSection() {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isPropertiesVisible, setIsPropertiesVisible] = useState(false);
+  const [isContactVisible, setIsContactVisible] = useState(false);
+  const [isTestimonialVisible, setIsTestimonialVisible] = useState(false);
+  const propertiesRef = useRef(null);
+  const contactRef = useRef(null);
+  const testimonialRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.07,
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const lenis = new Lenis({
@@ -62,6 +94,70 @@ export default function HeroSection() {
         lenis.destroy();
       };
     }
+  }, []);
+
+  useEffect(() => {
+    const propertiesObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsPropertiesVisible(true);
+        }
+      },
+      {
+        threshold: 0.08,
+      }
+    );
+
+    const contactObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsContactVisible(true);
+        }
+      },
+      {
+        threshold: 0.06,
+      }
+    );
+
+    if (propertiesRef.current) {
+      propertiesObserver.observe(propertiesRef.current);
+    }
+
+    if (contactRef.current) {
+      contactObserver.observe(contactRef.current);
+    }
+
+    return () => {
+      if (propertiesRef.current) {
+        propertiesObserver.unobserve(propertiesRef.current);
+      }
+      if (contactRef.current) {
+        contactObserver.unobserve(contactRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const testimonialObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsTestimonialVisible(true);
+        }
+      },
+      {
+        threshold: 0.07,
+      }
+    );
+
+    if (testimonialRef.current) {
+      testimonialObserver.observe(testimonialRef.current);
+    }
+
+    return () => {
+      if (testimonialRef.current) {
+        testimonialObserver.unobserve(testimonialRef.current);
+      }
+    };
   }, []);
 
   const trendingArticles = [
@@ -161,6 +257,10 @@ export default function HeroSection() {
   const [openQuestion, setOpenQuestion] = useState("where");
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentArticleSlide, setCurrentArticleSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
+  const [swipeOffset, setSwipeOffset] = useState(0);
 
   useEffect(() => {
     setIsClient(true);
@@ -195,15 +295,29 @@ export default function HeroSection() {
   };
 
   const handlePrevSlide = () => {
-    setCurrentSlide((prevSlide) =>
-      prevSlide === 0 ? filteredProperties.length - 2 : prevSlide - 1
-    );
+    const container = document.querySelector(".overflow-x-auto");
+    if (container) {
+      const newIndex =
+        currentSlide === 0 ? filteredProperties.length - 1 : currentSlide - 1;
+      container.scrollTo({
+        left: newIndex * container.clientWidth,
+        behavior: "smooth",
+      });
+      setCurrentSlide(newIndex);
+    }
   };
 
   const handleNextSlide = () => {
-    setCurrentSlide((prevSlide) =>
-      prevSlide === filteredProperties.length - 2 ? 0 : prevSlide + 1
-    );
+    const container = document.querySelector(".overflow-x-auto");
+    if (container) {
+      const newIndex =
+        currentSlide === filteredProperties.length - 1 ? 0 : currentSlide + 1;
+      container.scrollTo({
+        left: newIndex * container.clientWidth,
+        behavior: "smooth",
+      });
+      setCurrentSlide(newIndex);
+    }
   };
 
   const handlePrevArticleSlide = () => {
@@ -218,9 +332,34 @@ export default function HeroSection() {
     );
   };
 
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+    setIsSwiping(true);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isSwiping) return;
+    setTouchEnd(e.targetTouches[0].clientX);
+    const diff = touchStart - e.targetTouches[0].clientX;
+    setSwipeOffset(diff);
+  };
+
+  const handleTouchEnd = () => {
+    setIsSwiping(false);
+    const diff = touchStart - touchEnd;
+
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        handleNextSlide();
+      } else {
+        handlePrevSlide();
+      }
+    }
+    setSwipeOffset(0);
+  };
+
   return (
-    <section className="relative">
-      {/* Hero Section */}
+    <div ref={sectionRef}>
       <div className="relative h-[400px] sm:h-[500px] md:h-[650px]">
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent flex flex-col justify-center items-center text-white text-center px-4">
           <Image
@@ -231,11 +370,27 @@ export default function HeroSection() {
             className="object-cover"
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30 flex flex-col justify-center items-center text-white text-center px-4">
-          <h1 className="text-5xl md:text-6xl font-serif font-extrabold mb-6 leading-tight max-w-4xl">
+        <div
+          className={`absolute inset-0 bg-gradient-to-b from-black/50 to-black/30 flex flex-col justify-center items-center text-white text-center px-4 transform transition-all duration-1000 ease-out ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+          }`}
+        >
+          <h1
+            className={`text-5xl md:text-6xl font-serif font-extrabold mb-6 leading-tight max-w-4xl transform transition-all duration-1000 ease-out ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             Find. Invest. Thrive.
           </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-2xl font-light font-serif">
+          <p
+            className={`text-xl md:text-2xl mb-8 max-w-2xl font-light font-serif transform transition-all duration-1000 ease-out delay-200 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             Find Your Perfect Home in Ahmedabad – Effortless, Reliable, and Made
             for You!
           </p>
@@ -243,11 +398,21 @@ export default function HeroSection() {
       </div>
 
       {/* Search Panel Section */}
-      <div className="relative -mt-14 px-4 z-10">
+      <div
+        className={`relative -mt-14 px-4 z-10 transform transition-all duration-1000 ease-out delay-300 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+        }`}
+      >
         <div className="w-full max-w-5xl mx-auto bg-white md:bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100 backdrop-blur-sm bg-black/30 md:backdrop-blur-none md:bg-transparent">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between">
             {/* Location Field */}
-            <div className="w-full sm:flex-1 px-6 py-4 flex items-center">
+            <div
+              className={`w-full sm:flex-1 px-6 py-4 flex items-center transform transition-all duration-1000 ease-out delay-400 ${
+                isVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
+            >
               <div className="flex-1 relative">
                 <label className="block text-zinc-900 text-[10px] sm:text-lg font-medium">
                   Location
@@ -273,10 +438,22 @@ export default function HeroSection() {
             </div>
 
             {/* Separator */}
-            <div className="hidden sm:block w-px h-12 bg-gray-400 my-auto"></div>
+            <div
+              className={`hidden sm:block w-px h-12 bg-gray-400 my-auto transform transition-all duration-1000 ease-out delay-500 ${
+                isVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
+            ></div>
 
             {/* Property Type Field */}
-            <div className="w-full sm:flex-1 px-6 py-4 flex items-center">
+            <div
+              className={`w-full sm:flex-1 px-6 py-4 flex items-center transform transition-all duration-1000 ease-out delay-600 ${
+                isVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
+            >
               <div className="flex-1 relative">
                 <label className="block text-zinc-900 text-[10px] sm:text-lg font-medium">
                   Property Type
@@ -304,10 +481,22 @@ export default function HeroSection() {
             </div>
 
             {/* Separator */}
-            <div className="hidden sm:block w-px h-12 bg-gray-400 my-auto"></div>
+            <div
+              className={`hidden sm:block w-px h-12 bg-gray-400 my-auto transform transition-all duration-1000 ease-out delay-700 ${
+                isVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
+            ></div>
 
             {/* Price Range Field */}
-            <div className="w-full sm:flex-1 px-6 py-4 flex items-center">
+            <div
+              className={`w-full sm:flex-1 px-6 py-4 flex items-center transform transition-all duration-1000 ease-out delay-800 ${
+                isVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
+            >
               <div className="flex-1 relative">
                 <label className="block text-zinc-900 text-[10px] sm:text-lg font-medium">
                   Price Range
@@ -335,7 +524,13 @@ export default function HeroSection() {
             </div>
 
             {/* Search Button */}
-            <div className="w-full sm:w-auto py-3 px-4 flex justify-center">
+            <div
+              className={`w-full sm:w-auto py-3 px-4 flex justify-center transform transition-all duration-1000 ease-out delay-900 ${
+                isVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
+            >
               <button className="w-full sm:w-12 h-12 bg-[#BB9632] text-white rounded-lg flex items-center justify-center transition-colors duration-300 shadow-md hover:bg-[#A68529]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -360,13 +555,32 @@ export default function HeroSection() {
       <FeaturedProperties />
 
       {/* Featured Properties Section */}
-      <section className="py-16 px-4 ">
-        <div className="container mx-auto py-8 px-4 sm:px-6">
-          <div className="flex flex-col  justify-between items-left mb-8">
+      <section
+        ref={propertiesRef}
+        className={`py-8 md:py-16 px-4 transform transition-all duration-1000 ease-out ${
+          isPropertiesVisible
+            ? "translate-y-0 opacity-100"
+            : "translate-y-20 opacity-0"
+        }`}
+      >
+        <div className="container mx-auto py-4 md:py-8 px-4 sm:px-6">
+          <div
+            className={`flex flex-col justify-between items-left mb-8 transform transition-all duration-1000 ease-out delay-200 ${
+              isPropertiesVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <h1 className="text-2xl md:text-5xl mb-5 font-bold text-gray-900">
               Our featured exclusives
             </h1>
-            <div className="hidden mt-8 md:flex md:flex-row md:items-center md:space-x-6 border-b border-gray-200 relative">
+            <div
+              className={`hidden mt-8 md:flex md:flex-row md:items-center md:space-x-6 border-b border-gray-200 relative transform transition-all duration-1000 ease-out delay-400 ${
+                isPropertiesVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
+            >
               <button
                 className="text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2"
                 onClick={() => setActiveTab("all")}
@@ -452,7 +666,13 @@ export default function HeroSection() {
           </div>
 
           {/* Mobile tabs */}
-          <div className="flex md:hidden items-center space-x-6 mb-6 overflow-x-auto pb-2">
+          <div
+            className={`flex md:hidden items-center space-x-6 mb-6 overflow-x-auto pb-2 transform transition-all duration-1000 ease-out delay-600 ${
+              isPropertiesVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <button
               className={`text-sm relative px-3 pb-4 rounded-full transition-colors group flex items-center gap-2`}
               onClick={() => setActiveTab("all")}
@@ -537,54 +757,94 @@ export default function HeroSection() {
           </div>
 
           {isClient && (
-            <div className="relative">
-              {/* Navigation buttons - desktop */}
-              <button
-                className="hidden md:flex absolute -left-4 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-lg z-10 hover:bg-blue-50 transition-colors items-center justify-center"
-                aria-label="Previous properties"
-                onClick={handlePrevSlide}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-blue-600"
-                >
-                  <path d="M15 18l-6-6 6-6" />
-                </svg>
-              </button>
-
+            <div
+              className={`relative transform transition-all duration-1000 ease-out delay-800 ${
+                isPropertiesVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
+            >
               {/* Mobile view: Carousel */}
               <div className="md:hidden">
                 <div className="relative px-0 overflow-hidden">
                   <div
                     className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4"
-                    onScroll={(e) => {
-                      const container = e.target;
-                      const scrollLeft = container.scrollLeft;
-                      const containerWidth = container.clientWidth;
-                      const currentIndex = Math.round(
-                        scrollLeft / containerWidth
-                      );
-                      setCurrentSlide(currentIndex);
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    style={{
+                      touchAction: "pan-x",
+                      WebkitOverflowScrolling: "touch",
+                      overscrollBehavior: "contain",
+                      willChange: "transform",
+                      transform: `translateX(${swipeOffset}px)`,
+                      transition: isSwiping
+                        ? "none"
+                        : "transform 0.3s ease-out",
                     }}
                   >
                     {filteredProperties.map((property) => (
                       <div
                         key={property.id}
                         className="flex-shrink-0 w-[84.5vw] snap-center"
+                        style={{
+                          transform: `translateX(${
+                            isSwiping ? swipeOffset : 0
+                          }px)`,
+                          transition: isSwiping
+                            ? "none"
+                            : "transform 0.3s ease-out",
+                        }}
                       >
                         <div className="w-full h-full">
                           <PropertyCard property={property} />
                         </div>
                       </div>
                     ))}
+                  </div>
+
+                  {/* Mobile Navigation Buttons */}
+                  <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 flex justify-between px-2 z-10">
+                    <button
+                      onClick={handlePrevSlide}
+                      className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                      disabled={currentSlide === 0}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-[#BB9632]"
+                      >
+                        <path d="M15 18l-6-6 6-6" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={handleNextSlide}
+                      className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                      disabled={currentSlide === filteredProperties.length - 1}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-[#BB9632]"
+                      >
+                        <path d="M9 18l6-6-6-6" />
+                      </svg>
+                    </button>
                   </div>
 
                   {/* Mobile carousel indicators */}
@@ -619,28 +879,6 @@ export default function HeroSection() {
                   <PropertyCard key={property.id} property={property} />
                 ))}
               </div>
-
-              {/* Navigation buttons - desktop */}
-              <button
-                className="hidden md:flex absolute -right-4 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-lg z-10 hover:bg-blue-50 transition-colors items-center justify-center"
-                aria-label="Next properties"
-                onClick={handleNextSlide}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-blue-600"
-                >
-                  <path d="M9 18l6-6-6-6" />
-                </svg>
-              </button>
             </div>
           )}
         </div>
@@ -655,19 +893,44 @@ export default function HeroSection() {
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
         }
+        .touch-none {
+          touch-action: none;
+        }
+        .will-change-transform {
+          will-change: transform;
+        }
       `}</style>
 
       {/* Testimonial and Following Sections */}
-      <section className="py-16 px-4 bg-[#FFFAF4]">
+      <section
+        ref={testimonialRef}
+        className={`py-16 px-4 bg-[#FFFAF4] transform transition-all duration-1000 ease-out ${
+          isTestimonialVisible
+            ? "translate-y-0 opacity-100"
+            : "translate-y-20 opacity-0"
+        }`}
+      >
         <div className="container mx-auto">
-          <div className="mb-16 relative">
+          <div
+            className={`mb-16 relative transform transition-all duration-1000 ease-out delay-200 ${
+              isTestimonialVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
                 Finding My Dream Home Was Seamless With Mindestate. Their
                 Expertise And Guidance Made The Process Stress-Free. Thank You!
               </h2>
               <div className="h-1 w-24 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto my-6"></div>
-              <div className="flex justify-center mt-8">
+              <div
+                className={`flex justify-center mt-8 transform transition-all duration-1000 ease-out delay-400 ${
+                  isTestimonialVisible
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-20 opacity-0"
+                }`}
+              >
                 <div className="flex items-center bg-white rounded-lg shadow-sm px-4 py-2 border border-gray-100">
                   <Image
                     src="/google.png"
@@ -704,7 +967,13 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center mb-8">
+          <div
+            className={`flex justify-between items-center mb-8 transform transition-all duration-1000 ease-out delay-600 ${
+              isTestimonialVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
               What's in Trending
             </h2>
@@ -728,14 +997,23 @@ export default function HeroSection() {
             </Link>
           </div>
 
-          <div className="relative">
+          <div
+            className={`relative transform transition-all duration-1000 ease-out delay-800 ${
+              isTestimonialVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             {/* Mobile Carousel */}
-            <div className="md:hidden overflow-hidden">
+            <div className="md:hidden overflow-hidden touch-none">
               <div
-                className="flex transition-transform duration-300 ease-in-out"
+                className="flex transition-transform duration-300 ease-in-out will-change-transform"
                 style={{
                   transform: `translateX(-${currentArticleSlide * 100}%)`,
                 }}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
               >
                 {trendingArticles.map((article) => (
                   <div key={article.id} className="w-full flex-shrink-0 px-4">
@@ -887,14 +1165,27 @@ export default function HeroSection() {
       </section>
 
       {/* Contact section */}
-      <section className="py-16 pb-28 px-0 relative mb-8">
+      <section
+        ref={contactRef}
+        className={`py-4 md:py-16 pb-8 md:pb-28 px-0 relative mb-2 md:mb-8 transform transition-all duration-1000 ease-out ${
+          isContactVisible
+            ? "translate-y-0 opacity-100"
+            : "translate-y-20 opacity-0"
+        }`}
+      >
         <div className="container flex flex-col mx-auto px-4 md:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-start">
             {/* Social Media Buttons - Mobile Only */}
-            <div className="md:hidden flex gap-3 self-end -mb-2 w-full justify-end">
+            <div
+              className={`md:hidden flex gap-3 self-end -mb-8 w-full justify-end transform transition-all duration-1000 ease-out delay-200 ${
+                isContactVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
+            >
               <a
                 href="#"
-                className="w-12 sm:w-14 md:w-16 h-10 sm:h-12 md:h-14 rounded-full bg-white flex items-center justify-center text-[#BB9632] hover:bg-gray-100 transition-colors border border-[#BB9632] shadow-md hover:shadow-lg"
+                className="w-12 sm:w-14 md:w-16 h-10 sm:h-12 md:h-14 rounded-full  bg-white flex items-center justify-center text-[#BB9632] hover:bg-gray-100 transition-colors border border-[#BB9632] shadow-md hover:shadow-lg"
                 aria-label="Instagram"
               >
                 <svg
@@ -907,7 +1198,7 @@ export default function HeroSection() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
+                  className="w-5 h-5  sm:w-6 sm:h-6 md:w-7 md:h-7"
                 >
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
@@ -935,7 +1226,13 @@ export default function HeroSection() {
                 </svg>
               </a>
             </div>
-            <div className="w-full md:w-auto">
+            <div
+              className={`w-full md:w-auto transform transition-all duration-1000 ease-out delay-400 ${
+                isContactVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
+            >
               <h2 className="text-xl md:text-2xl">Get started</h2>
               <h1 className="text-2xl md:text-3xl lg:text-4xl mt-4 md:mt-8 font-semibold">
                 Get in touch with us. We're here to assist you.
@@ -943,7 +1240,13 @@ export default function HeroSection() {
             </div>
           </div>
           {/* Social Media Buttons - Desktop Only */}
-          <div className="hidden md:flex absolute right-8 top-1/3 flex-col gap-3">
+          <div
+            className={`hidden md:flex absolute right-8 top-1/3 flex-col gap-3 transform transition-all duration-1000 ease-out delay-600 ${
+              isContactVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <a
               href="#"
               className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#BB9632] hover:bg-gray-100 transition-colors border border-[#BB9632] shadow-md hover:shadow-lg"
@@ -986,7 +1289,13 @@ export default function HeroSection() {
             </a>
           </div>
           {/* structure of form  */}
-          <div className="flex flex-col md:flex-row justify-between gap-3 mt-5">
+          <div
+            className={`flex flex-col md:flex-row justify-between gap-3 mt-5 transform transition-all duration-1000 ease-out delay-800 ${
+              isContactVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <div className="w-full md:w-1/3 py-3 md:py-5 px-4 border-b border-gray-400">
               <input
                 type="text"
@@ -1009,23 +1318,35 @@ export default function HeroSection() {
               />
             </div>
           </div>
-          <div className="mt-5">
+          <div
+            className={`mt-5 transform transition-all duration-1000 ease-out delay-1000 ${
+              isContactVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <textarea
               placeholder="Message"
               className="w-full min-h-[120px] px-4 py-3 border-b border-gray-400 resize-none focus:outline-none focus:border-[#BB9632] transition-colors placeholder-gray-500 bg-transparent text-base"
               rows={4}
             />
           </div>
-          <div className="mt-6 md:mt-8">
+          <div
+            className={`mt-6 md:mt-8 transform transition-all duration-1000 ease-out delay-1200 ${
+              isContactVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <button
               type="submit"
-              className="w-[90%] md:w-auto whitespace-nowrap bg-[#BB9632] text-white px-6 py-3 rounded-3xl hover:bg-[#A68529] transition-colors font-medium mx-auto block"
+              className="w-[90%] md:w-auto whitespace-nowrap bg-[#BB9632] text-white px-6 py-3 rounded-3xl hover:bg-[#A68529] transition-colors font-medium mx-auto md:mx-0 block"
             >
               Leave us a Message <span className="ml-3">→</span>
             </button>
           </div>
         </div>
       </section>
-    </section>
+    </div>
   );
 }

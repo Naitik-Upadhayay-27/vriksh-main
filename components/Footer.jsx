@@ -43,7 +43,7 @@ export default function Footer() {
           <div className="space-y-4 sm:space-y-6 lg:space-y-8">
             <div>
               <Link href="/">
-                <div className="relative w-40 h-14 -mt-3 scale-[1.65] overflow-hidden ml-15 bg-white">
+                <div className="relative w-40 h-14 -mt-3 scale-[1.65] overflow-hidden ml-8 sm:ml-15 bg-white">
                   <Image
                     src="/logo.png"
                     alt="Mindsestate Logo"
@@ -83,26 +83,17 @@ export default function Footer() {
               </h3>
               <ul className="space-y-2 md:space-y-4 text-[#1d1d1f] text-sm md:text-base">
                 <li>
-                  <Link
-                    href="#"
-                    className="hover:text-[#BB9627] transition-colors"
-                  >
+                  <Link href="#" className="hover:text-[#BB9627]">
                     Properties Listing
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="#"
-                    className="hover:text-[#BB9627] transition-colors"
-                  >
+                  <Link href="#" className="hover:text-[#BB9627]">
                     Blog
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="#"
-                    className="hover:text-[#BB9627] transition-colors"
-                  >
+                  <Link href="#" className="hover:text-[#BB9627]">
                     Contact
                   </Link>
                 </li>
@@ -116,26 +107,17 @@ export default function Footer() {
               </h3>
               <ul className="space-y-2 md:space-y-4 text-[#1d1d1f] text-sm md:text-base">
                 <li>
-                  <Link
-                    href="#"
-                    className="hover:text-[#BB9627] transition-colors"
-                  >
+                  <Link href="#" className="hover:text-[#BB9627]">
                     Agents
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="#"
-                    className="hover:text-[#BB9627] transition-colors"
-                  >
+                  <Link href="#" className="hover:text-[#BB9627]">
                     Agencies
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="#"
-                    className="hover:text-[#BB9627] transition-colors"
-                  >
+                  <Link href="#" className="hover:text-[#BB9627]">
                     FAQs
                   </Link>
                 </li>
@@ -153,7 +135,7 @@ export default function Footer() {
             </p>
             <Button
               variant="outline"
-              className="rounded-full border-[#BB9632] text-[#BB9632] hover:bg-[#BB9632] hover:text-white transition-colors text-sm"
+              className="rounded-full border-[#BB9632] text-[#BB9632] hover:bg-[#BB9632] hover:text-white"
             >
               Make an Inquiry
             </Button>
@@ -163,28 +145,16 @@ export default function Footer() {
                 Connect With Us
               </h3>
               <div className="flex space-x-4">
-                <Link
-                  href="#"
-                  className="text-[#1d1d1f] hover:text-[#0196ff] transition-colors"
-                >
+                <Link href="#" className="text-[#1d1d1f] hover:text-[#BB9627]">
                   <Facebook className="h-4 w-4 md:h-5 md:w-5" />
                 </Link>
-                <Link
-                  href="#"
-                  className="text-[#1d1d1f] hover:text-[#0196ff] transition-colors"
-                >
+                <Link href="#" className="text-[#1d1d1f] hover:text-[#BB9627]">
                   <Twitter className="h-4 w-4 md:h-5 md:w-5" />
                 </Link>
-                <Link
-                  href="#"
-                  className="text-[#1d1d1f] hover:text-[#0196ff] transition-colors"
-                >
+                <Link href="#" className="text-[#1d1d1f] hover:text-[#BB9627]">
                   <Youtube className="h-4 w-4 md:h-5 md:w-5" />
                 </Link>
-                <Link
-                  href="#"
-                  className="text-[#1d1d1f] hover:text-[#0196ff] transition-colors"
-                >
+                <Link href="#" className="text-[#1d1d1f] hover:text-[#BB9627]">
                   <Linkedin className="h-4 w-4 md:h-5 md:w-5" />
                 </Link>
               </div>
@@ -205,8 +175,14 @@ export default function Footer() {
         <>
           <button
             onClick={() => window.open("https://wa.me/your-number", "_blank")}
-            className="fixed bottom-20 right-4 md:bottom-22 md:right-6 bg-[#BB9627] text-white p-2 md:p-3 rounded-full shadow-lg hover:bg-[#A68529] transition-colors"
+            className="bg-[#15960C] text-white p-2 md:p-3 rounded-full shadow-lg z-50"
             aria-label="Contact on WhatsApp"
+            style={{
+              position: "fixed",
+              bottom: "5rem",
+              right: "1rem",
+              zIndex: 9999,
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -221,8 +197,14 @@ export default function Footer() {
           </button>
           <button
             onClick={scrollToTop}
-            className="fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-[#BB9632] text-white p-2 md:p-3 rounded-full shadow-lg hover:bg-[#A68529] transition-colors"
+            className="bg-[#BB9632] text-white p-2 md:p-3 rounded-full shadow-lg z-50"
             aria-label="Scroll to top"
+            style={{
+              position: "fixed",
+              bottom: "1rem",
+              right: "1rem",
+              zIndex: 9999,
+            }}
           >
             <ArrowUp className="h-4 w-4 md:h-5 md:w-5" />
           </button>

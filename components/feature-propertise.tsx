@@ -1,3 +1,5 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -7,12 +9,45 @@ import { ArrowRight } from "lucide-react"
  *
  * @returns A React component showcasing featured properties with descriptive text
  */
-export function FeaturedProperties() {
+export const FeaturedProperties = () => {
+    const sectionRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && entry.intersectionRatio >= 0.1) {
+                    setIsVisible(true);
+                }
+            },
+            {
+                threshold: 0.1,
+            }
+        );
+
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
+        }
+
+        return () => {
+            if (sectionRef.current) {
+                observer.unobserve(sectionRef.current);
+            }
+        };
+    }, []);
+
     return (
-        <section className="pt-8 sm:pt-12 pb-12 sm:pb-24 px-4 -mt-7 bg-[#FFFAF4]">
+        <section 
+            ref={sectionRef}
+            className="pt-4 sm:pt-12 pb-6 sm:pb-24 px-4 -mt-7 bg-[#FFFAF4]"
+        >
             <div className="container mx-auto">
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-8 sm:gap-12">
-                    <div className="w-full lg:w-2/5  px-5 py-15 rounded-xl">
+                    <div 
+                        className={`w-full lg:w-2/5 px-5 py-15 rounded-xl transform transition-all duration-1000 ease-out ${
+                            isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+                        }`}
+                    >
                         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">
                             Your Trusted Gateway to Ahmedabad's Finest Homes
                         </h2>
@@ -25,7 +60,11 @@ export function FeaturedProperties() {
                     </div>
 
                     {/* Image Grid - Hidden on small screens */}
-                    <div className="hidden lg:block lg:w-1/2">
+                    <div 
+                        className={`hidden lg:block lg:w-1/2 transform transition-all duration-1000 ease-out delay-300 ${
+                            isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+                        }`}
+                    >
                         <div className="relative w-full h-[500px] lg:h-[600px]">
                             {/* Top left image - Large */}
                             <div className="absolute top-0 left-0 w-[49%] h-[58%] overflow-hidden rounded-md group">

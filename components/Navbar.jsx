@@ -87,7 +87,7 @@ export default function Header() {
                 <Link
                   key={index}
                   href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                  className="text-gray-800 font-medium py-2 px-4 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all"
+                  className="text-gray-800 font-medium py-2 px-4 rounded-lg hover:bg-[#BB9627] hover:text-white transition-all"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item}
@@ -95,7 +95,7 @@ export default function Header() {
               ))}
               <Link
                 href="/contact"
-                className="bg-blue-600 text-white py-3 px-4 rounded-lg font-medium text-center mt-2 hover:bg-blue-700 transition-all"
+                className="bg-[#BB9627] text-white py-3 px-4 rounded-lg font-medium text-center mt-2 "
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Contact Us

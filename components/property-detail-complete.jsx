@@ -27,9 +27,24 @@ export function PropertyDetailComplete({ property }) {
   const [touchEnd, setTouchEnd] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
+  const [showGallery, setShowGallery] = useState(false);
+  const [galleryCurrentSlide, setGalleryCurrentSlide] = useState(0);
 
   // Minimum distance for a swipe
   const minSwipeDistance = 50;
+
+  // Sample images for the gallery
+  const galleryImages = [
+    "/about1.png",
+    "/about3.png",
+    "/about4.png",
+    "/about5.png",
+    "/about6.png",
+    "/about7.png",
+    "/about8.png",
+    "/about9.png",
+    "/about10.png",
+  ];
 
   const similarProperties = [
     {
@@ -91,6 +106,8 @@ export function PropertyDetailComplete({ property }) {
     setTouchEnd(e.touches[0].clientX);
     setIsDragging(true);
     setDragOffset(0);
+    // Prevent default to stop screen scrolling
+    e.preventDefault();
   };
 
   const handleTouchMove = (e) => {
@@ -98,6 +115,8 @@ export function PropertyDetailComplete({ property }) {
     setTouchEnd(e.touches[0].clientX);
     const currentOffset = touchStart - e.touches[0].clientX;
     setDragOffset(currentOffset);
+    // Prevent default to stop screen scrolling
+    e.preventDefault();
   };
 
   const handleTouchEnd = () => {
@@ -121,8 +140,160 @@ export function PropertyDetailComplete({ property }) {
     setTouchEnd(null);
   };
 
+  const handleGalleryTouchStart = (e) => {
+    setTouchStart(e.touches[0].clientX);
+    setTouchEnd(e.touches[0].clientX);
+    setIsDragging(true);
+    setDragOffset(0);
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleGalleryTouchMove = (e) => {
+    if (!isDragging) return;
+    setTouchEnd(e.touches[0].clientX);
+    const currentOffset = touchStart - e.touches[0].clientX;
+    setDragOffset(currentOffset);
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleGalleryTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && galleryCurrentSlide < galleryImages.length - 1) {
+      setGalleryCurrentSlide((prev) => prev + 1);
+    } else if (isRightSwipe && galleryCurrentSlide > 0) {
+      setGalleryCurrentSlide((prev) => prev - 1);
+    } else {
+      setDragOffset(0);
+    }
+
+    setIsDragging(false);
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  const handleGalleryPrev = () => {
+    setGalleryCurrentSlide((prev) =>
+      prev === 0 ? galleryImages.length - 1 : prev - 1
+    );
+  };
+
+  const handleGalleryNext = () => {
+    setGalleryCurrentSlide((prev) =>
+      prev === galleryImages.length - 1 ? 0 : prev + 1
+    );
+  };
+
   return (
     <div className="flex flex-col text-black w-[114%] ml-[-7%] p-0 m-0 overflow-hidden">
+      {/* Image Gallery Overlay */}
+      {showGallery && (
+        <div className="fixed inset-0 z-50">
+          {/* Backdrop with blur and dark overlay */}
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300"
+            onClick={() => setShowGallery(false)}
+          />
+
+          {/* Gallery Container */}
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowGallery(false)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            {/* Navigation Buttons */}
+            <button
+              onClick={handleGalleryPrev}
+              className="absolute left-4 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-10"
+            >
+              <ChevronLeft className="w-8 h-8" />
+            </button>
+            <button
+              onClick={handleGalleryNext}
+              className="absolute right-4 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-10"
+            >
+              <ChevronRight className="w-8 h-8" />
+            </button>
+
+            {/* Image Carousel */}
+            <div
+              className="w-full max-w-4xl mx-auto px-4"
+              onTouchStart={handleGalleryTouchStart}
+              onTouchMove={handleGalleryTouchMove}
+              onTouchEnd={handleGalleryTouchEnd}
+              onTouchCancel={handleGalleryTouchEnd}
+              style={{
+                touchAction: "pan-x",
+                WebkitOverflowScrolling: "touch",
+                overscrollBehavior: "contain",
+              }}
+            >
+              <div
+                className={`flex transition-transform ${
+                  isDragging ? "duration-0" : "duration-300"
+                } ease-out`}
+                style={{
+                  transform: `translateX(calc(-${
+                    galleryCurrentSlide * 100
+                  }% - ${isDragging ? dragOffset : 0}px))`,
+                }}
+              >
+                {galleryImages.map((image, index) => (
+                  <div key={index} className="w-full flex-shrink-0">
+                    <div className="relative w-full h-[80vh]">
+                      <Image
+                        src={image}
+                        alt={`Gallery Image ${index + 1}`}
+                        fill
+                        className="object-contain"
+                        priority={index === galleryCurrentSlide}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dots Indicator */}
+            <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2">
+              {galleryImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setGalleryCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    galleryCurrentSlide === index
+                      ? "bg-white scale-125"
+                      : "bg-white/50 hover:bg-white/75"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Image Gallery Section */}
       <div className="w-full p-0 mb-6 md:mb-14">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-2 px-4 md:px-0">
@@ -156,6 +327,32 @@ export function PropertyDetailComplete({ property }) {
             </div>
           </div>
 
+          {/* Desktop Thumbnail Gallery */}
+          <div className="hidden md:grid md:col-span-3 grid-cols-1 gap-2">
+            <div className="relative w-full h-[258px] overflow-hidden rounded-xl">
+              <Image
+                src="/about1.png"
+                alt="Living room"
+                fill
+                className="object-cover transition-transform duration-500 hover:scale-105"
+              />
+            </div>
+            <div
+              className="relative w-full h-[258px] overflow-hidden rounded-xl cursor-pointer"
+              onClick={() => setShowGallery(true)}
+            >
+              <Image
+                src="/about2.png"
+                alt="Interior design"
+                fill
+                className="object-cover transition-transform duration-500 hover:scale-105"
+              />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                <span className="text-white text-sm font-medium">+10</span>
+              </div>
+            </div>
+          </div>
+
           {/* Mobile Thumbnail Gallery */}
           <div className="block md:hidden">
             <div className="grid grid-cols-5 gap-1">
@@ -171,7 +368,10 @@ export function PropertyDetailComplete({ property }) {
                     className="object-cover"
                   />
                   {index === 5 && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                    <div
+                      className="absolute inset-0 flex items-center justify-center bg-black/50 cursor-pointer"
+                      onClick={() => setShowGallery(true)}
+                    >
                       <span className="text-white text-sm font-medium">
                         +10
                       </span>
@@ -181,39 +381,14 @@ export function PropertyDetailComplete({ property }) {
               ))}
             </div>
           </div>
-
-          {/* Desktop Thumbnail Gallery */}
-          <div className="hidden md:grid md:col-span-3 grid-cols-1 gap-2">
-            <div className="relative w-full h-[258px] overflow-hidden rounded-xl">
-              <Image
-                src="/about1.png"
-                alt="Living room"
-                fill
-                className="object-cover transition-transform duration-500 hover:scale-105"
-              />
-            </div>
-            <div className="relative w-full h-[258px] overflow-hidden rounded-xl">
-              <Image
-                src="/about2.png"
-                alt="Interior design"
-                fill
-                className="object-cover transition-transform duration-500 hover:scale-105"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-white/80 px-4 py-2 rounded-full">
-                  <span className="text-gray-800 text-xl font-medium">10+</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
-      <div className="grid px-0 sm:px-8 grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid px-4 sm:px-8 grid-cols-1 md:grid-cols-3 gap-4">
         {/* Main Content */}
-        <div className="md:col-span-2 space-y-4 sm:space-y-8">
+        <div className="md:col-span-2 space-y-2 sm:space-y-4">
           {/* Title and Basic Info */}
-          <div className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg">
+          <div className="bg-white p-4 rounded-lg">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
               <div className="flex-1">
                 <h1 className="text-xl sm:text-2xl font-bold text-black mb-2">
@@ -254,7 +429,7 @@ export function PropertyDetailComplete({ property }) {
           </div>
 
           {/* Special Price and Offers */}
-          <div className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg space-y-3 order-1 sm:order-none">
+          <div className="bg-white p-4 rounded-lg space-y-2 order-1 sm:order-none">
             <div className="flex items-center gap-2">
               <Tag className="h-4 w-4 text-[#BB9627]" />
               <span className="text-sm font-medium text-black">
@@ -283,14 +458,14 @@ export function PropertyDetailComplete({ property }) {
           </div>
 
           {/* Download Button */}
-          <div className="flex mx-4 sm:mx-0 items-center justify-center sm:justify-start gap-4 mt-4 order-2 sm:order-none">
+          <div className="flex items-center justify-center ml-4 sm:justify-start gap-2 mt-2 order-2 sm:order-none">
             <Button className="w-full sm:w-auto rounded-full px-15 shadow-sm hover:shadow bg-[#BB9627] hover:bg-[#BB9627]/80 text-white">
               Download
             </Button>
           </div>
 
           {/* Property Specs */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 border-t border-gray-200 py-4 sm:py-6 my-4 sm:my-6 ml-8 sm:ml-0">
+          <div className="grid grid-cols-2 sm:grid-cols-3 pl-4 gap-2 border-t border-gray-200 py-3 my-2">
             <div className="flex flex-col gap-1">
               <div className="text-xs sm:text-sm text-gray-600">Rooms:</div>
               <div className="text-sm sm:text-base font-medium text-gray-700">
@@ -332,7 +507,7 @@ export function PropertyDetailComplete({ property }) {
           </div>
 
           {/* Description */}
-          <div className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg space-y-4">
+          <div className="bg-white p-4 rounded-lg space-y-2">
             <h2 className="text-xl font-bold text-black">Description</h2>
             <p className="text-gray-600 text-sm leading-relaxed">
               Maecenas egestas quam et volutpat bibendum metus vulputate platea
@@ -346,7 +521,7 @@ export function PropertyDetailComplete({ property }) {
             </p>
           </div>
           {/* Highlights */}
-          <div className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 mb-15 rounded-lg">
+          <div className="bg-white p-4 mb-8 rounded-lg">
             <div className="flex gap-8">
               <h3 className="text-base font-sm text-zinc-600 w-32">
                 Highlights:
@@ -382,11 +557,11 @@ export function PropertyDetailComplete({ property }) {
             </div>
           </div>
           {/* More Information */}
-          <section className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg mb-8">
+          <section className="bg-white p-4 rounded-lg mb-4">
             <h2 className="text-xl font-semibold mb-6">More Information</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Age :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -398,7 +573,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Type :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -406,7 +581,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Installment Facility :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -414,7 +589,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Insurance :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -422,7 +597,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   3rd Party :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -430,7 +605,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Swimming Pool :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -438,7 +613,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Garden & Trail :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -446,7 +621,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Total Floor :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -454,7 +629,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Security :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -462,7 +637,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Elevator :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -470,7 +645,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Driving Capacity :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -478,7 +653,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Exit :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -486,7 +661,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Fire Place :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -494,7 +669,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
-                <span className="text-base sm:text-sm text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
+                <span className="text-base sm:text-sm font-semibold text-[#6d7175] w-1/2 sm:w-40 mb-0 sm:mb-0">
                   Heating System :
                 </span>
                 <span className="text-base sm:text-sm text-gray-500 ml-2">
@@ -504,11 +679,11 @@ export function PropertyDetailComplete({ property }) {
             </div>
           </section>
           {/* Property Summary */}
-          <section className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg mb-8">
+          <section className="bg-white p-4 rounded-lg mb-4">
             <h2 className="text-xl font-semibold mb-6">Property Summary</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-0">
               <div className="flex items-center whitespace-nowrap border-t sm:border-t border-b sm:border-b border-gray-200 py-4">
-                <span className="text-[#6d7175] inline-block w-32">
+                <span className="text-[#6d7175] font-semibold inline-block w-32">
                   Property Id :
                 </span>
                 <span className="inline-block ml-4 text-gray-500">
@@ -516,7 +691,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex items-center whitespace-nowrap sm:border-t border-b sm:border-b border-gray-200 py-4">
-                <span className="text-[#6d7175] inline-block w-32">
+                <span className="text-[#6d7175] font-semibold inline-block w-32">
                   Listing Type :
                 </span>
                 <span className="inline-block ml-4 text-gray-500">
@@ -524,7 +699,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex items-center whitespace-nowrap border-b border-gray-200 py-4">
-                <span className="text-[#6d7175] inline-block w-32">
+                <span className="text-[#6d7175] font-semibold inline-block w-32">
                   Property Type :
                 </span>
                 <span className="inline-block ml-4 text-gray-500">
@@ -532,7 +707,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex items-center whitespace-nowrap border-b border-gray-200 py-4">
-                <span className="text-[#6d7175] inline-block w-32">
+                <span className="text-[#6d7175] font-semibold inline-block w-32">
                   Current Owner :
                 </span>
                 <span className="inline-block ml-4 text-gray-500">
@@ -540,13 +715,13 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex items-center whitespace-nowrap border-b border-gray-200 py-4">
-                <span className="text-[#6d7175] inline-block w-32">
+                <span className="text-[#6d7175] font-semibold inline-block w-32">
                   Insurance :
                 </span>
                 <span className="inline-block ml-4 text-gray-500">Yes</span>
               </div>
               <div className="flex items-center whitespace-nowrap border-b border-gray-200 py-4">
-                <span className="text-[#6d7175] inline-block w-32">
+                <span className="text-[#6d7175] font-semibold inline-block w-32">
                   Architecture :
                 </span>
                 <span className="inline-block ml-4 text-gray-500">
@@ -554,7 +729,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex items-center whitespace-nowrap border-b border-gray-200 py-4">
-                <span className="text-[#6d7175] inline-block w-32">
+                <span className="text-[#6d7175] font-semibold inline-block w-32">
                   Total Floor :
                 </span>
                 <span className="inline-block ml-4 text-gray-500">
@@ -562,7 +737,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex items-center whitespace-nowrap border-b border-gray-200 py-4">
-                <span className="text-[#6d7175] inline-block w-32">
+                <span className="text-[#6d7175] font-semibold inline-block w-32">
                   Year of Built :
                 </span>
                 <span className="inline-block ml-4 text-gray-500">
@@ -570,7 +745,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex items-center whitespace-nowrap border-b border-gray-200 py-4">
-                <span className="text-[#6d7175] inline-block w-32">
+                <span className="text-[#6d7175] font-semibold inline-block w-32">
                   Furniture Type :
                 </span>
                 <span className="inline-block ml-4 text-gray-500">
@@ -578,7 +753,7 @@ export function PropertyDetailComplete({ property }) {
                 </span>
               </div>
               <div className="flex items-center whitespace-nowrap border-b border-gray-200 py-4">
-                <span className="text-[#6d7175] inline-block w-32">
+                <span className="text-[#6d7175] font-semibold inline-block w-32">
                   Payment Way :
                 </span>
                 <span className="inline-block ml-4 text-gray-500">
@@ -588,7 +763,7 @@ export function PropertyDetailComplete({ property }) {
             </div>
           </section>
           {/* Features */}
-          <section className="bg-white mx-4 sm:mx-0 p-4 sm:p-6 rounded-lg mb-8">
+          <section className="bg-white p-4 rounded-lg mb-4">
             <h2 className="text-xl font-semibold mb-6">Property Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4">
               {[
@@ -625,7 +800,7 @@ export function PropertyDetailComplete({ property }) {
             </div>
           </section>
           {/* Floor Plans */}
-          <section className="bg-white mx-4 sm:mx-0 py-6 px-4 sm:px-6 rounded-lg">
+          <section className="bg-white py-3 px-4 rounded-lg">
             <h2 className="text-xl font-semibold mb-6">Floor Plans</h2>
             <div className="space-y-2">
               <div className="flex items-center py-3 px-4 bg-[#F8F5F0]  rounded-md transition-colors duration-300">
@@ -642,7 +817,7 @@ export function PropertyDetailComplete({ property }) {
             </div>
           </section>
           {/* Nearby Places */}
-          <section className="bg-white mx-4 sm:mx-0 py-6 px-4 sm:px-6 rounded-lg">
+          <section className="bg-white py-3 px-4 rounded-lg">
             <h2 className="text-xl font-semibold mb-6">Nearby Places</h2>
             <div className="mb-6">
               <div className="grid grid-cols-4 gap-2 sm:hidden">
@@ -761,9 +936,9 @@ export function PropertyDetailComplete({ property }) {
         </div>
 
         {/* Sidebar */}
-        <div className="md:col-span-1 space-y-8 mx-4 sm:mx-0">
+        <div className="md:col-span-1 space-y-4">
           {/* Agent Info */}
-          <div className="border border-gray-200 shadow-sm rounded-lg p-6 space-y-6 bg-white">
+          <div className="border border-gray-200 shadow-sm rounded-lg p-4 space-y-4 bg-white">
             <div className="space-y-4">
               <h3 className="text-lg font-bold text-gray-800">Listed By</h3>
               <div className="flex items-center gap-3">
@@ -815,7 +990,7 @@ export function PropertyDetailComplete({ property }) {
           </div>
 
           {/* Search Property Box */}
-          <div className="border border-gray-200 shadow-sm rounded-lg p-6 space-y-4 bg-white">
+          <div className="border border-gray-200 shadow-sm rounded-lg p-4 space-y-2 bg-white">
             <input
               type="text"
               placeholder="Enter Keyword..."
@@ -1022,6 +1197,11 @@ export function PropertyDetailComplete({ property }) {
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
               onTouchCancel={handleTouchEnd}
+              style={{
+                touchAction: "pan-x",
+                WebkitOverflowScrolling: "touch",
+                overscrollBehavior: "contain",
+              }}
             >
               {/* Navigation Buttons - Centered */}
               <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 flex justify-between px-2 z-10 pointer-events-none">
@@ -1049,6 +1229,9 @@ export function PropertyDetailComplete({ property }) {
                   transform: `translateX(calc(-${currentSlide * 100}% - ${
                     isDragging ? dragOffset : 0
                   }px))`,
+                  touchAction: "pan-x",
+                  WebkitOverflowScrolling: "touch",
+                  overscrollBehavior: "contain",
                 }}
               >
                 {filteredProperties.map((prop) => (
@@ -1122,11 +1305,11 @@ export function PropertyDetailComplete({ property }) {
           </div>
 
           {/* Desktop Grid */}
-          <div className="hidden sm:grid sm:grid-cols-3 justify-items-center">
+          <div className="hidden sm:grid sm:grid-cols-3 gap-1 justify-items-center">
             {filteredProperties.map((prop) => (
               <div
                 key={prop.id}
-                className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow duration-300 w-full max-w-sm"
+                className="bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow duration-300 w-full max-w-[400px]"
               >
                 <div className="relative h-64">
                   <Image

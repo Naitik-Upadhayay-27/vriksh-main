@@ -1,15 +1,46 @@
-import React, { JSX } from "react"
-import Image from "next/image"
+"use client";
+import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
+export function FeaturedPropertiesAbout() {
+    const [isVisible, setIsVisible] = useState(false);
+    const sectionRef = useRef(null);
 
-interface FeaturedPropertiesAboutProps {}
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                }
+            },
+            {
+                threshold: 0.05, // 5% visibility trigger
+            }
+        );
 
-export const FeaturedPropertiesAbout: React.FC<FeaturedPropertiesAboutProps> = (): JSX.Element => {
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
+        }
+
+        return () => {
+            if (sectionRef.current) {
+                observer.unobserve(sectionRef.current);
+            }
+        };
+    }, []);
+
     return (
-        <section className="pt-6 sm:pt-8 md:pt-12 pb-8 sm:pb-12 md:pb-24 px-4 sm:px-6 md:px-8 -mt-7 bg-white">
+        <section 
+            ref={sectionRef}
+            className={`pt-6 sm:pt-8 md:pt-12 pb-8 sm:pb-12 md:pb-24 px-2 sm:px-4 md:px-6 -mt-7 bg-white transform transition-all duration-1000 ease-out ${
+                isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+            }`}
+        >
             <div className="w-full max-w-7xl mx-auto">
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 md:gap-12">
-                    <div className="w-full lg:w-2/5 px-4 sm:px-5 py-8 sm:py-12 md:py-15 rounded-xl">
+                    <div className={`w-full lg:w-2/5 px-2 sm:px-4 py-8 sm:py-12 md:py-15 rounded-xl transform transition-all duration-1000 ease-out delay-200 ${
+                        isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+                    }`}>
                         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">
                             Your Gateway to Ahmedabad's Best Upcoming Homes
                         </h2>
@@ -19,7 +50,9 @@ export const FeaturedPropertiesAbout: React.FC<FeaturedPropertiesAboutProps> = (
                     </div>
 
                     {/* Image Grid - Responsive for all screens */}
-                    <div className="w-full lg:w-1/2">
+                    <div className={`w-full lg:w-1/2 transform transition-all duration-1000 ease-out delay-400 ${
+                        isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+                    }`}>
                         <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
                             {/* Top left image - Large */}
                             <div className="absolute top-0 left-0 w-[49%] h-[58%] overflow-hidden rounded-md">

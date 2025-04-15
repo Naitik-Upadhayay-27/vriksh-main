@@ -232,58 +232,44 @@ function PropertyCard({
 export default function PropertiesListFullwidth() {
   return (
     <div className="container mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
-      <div className="flex items-center text-sm mb-2">
+      <div className="flex  items-center text-sm mb-2">
         <Link href="/" className="text-[#333333] hover:underline">
           Home
         </Link>
         <span className="mx-2 text-[#808080]">›</span>
         <span className="text-[#BB9627]">Properties List Fullwidth</span>
       </div>
-      <h1 className="text-xl sm:text-2xl font-bold text-[#1d1d1f] mb-4 sm:mb-6">
-        Properties List Fullwidth
-      </h1>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 sm:mb-6">
-        <div className="text-sm text-[#666666]">
-          1 to 6 out of 10 properties
-        </div>
-        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-[#666666]">Sort By:</span>
-            <button className="flex items-center text-sm text-[#333333] font-medium">
-              Date New to Old <ChevronDown className="ml-1 h-4 w-4" />
-            </button>
-          </div>
-          <div className="flex items-center gap-2">
-            <button className="bg-[#BB9627] p-1.5 rounded">
-              <Grid className="h-4 w-4 text-white" />
-            </button>
-            <button className="p-1.5 rounded">
-              <List className="h-4 w-4 text-[#666666]" />
-            </button>
+      <div className="px-4 sm:px-0">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#1d1d1f] mb-4 sm:mb-6">
+          Properties List Fullwidth
+        </h1>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 sm:mb-6">
+          <div className="text-sm text-[#666666]">
+            1 to 6 out of 10 properties
           </div>
         </div>
-      </div>
-      <div className="grid grid-cols-1 gap-4 sm:gap-6">
-        {properties.map((property) => (
-          <PropertyCard
-            key={property.id}
-            image={property.image}
-            title={property.title}
-            location={property.location}
-            beds={property.beds}
-            baths={property.baths}
-            area={property.sqft}
-            price={property.price}
-            priceType={property.priceType}
-            buildYear={property.buildYear}
-            tags={[
-              property.type,
-              ...(property.featured ? ["Featured"] : []),
-              ...(property.hot ? ["Hot"] : []),
-            ]}
-            date={property.addedDate}
-          />
-        ))}
+        <div className="grid grid-cols-1 gap-4 sm:gap-6">
+          {properties.map((property) => (
+            <PropertyCard
+              key={property.id}
+              image={property.image}
+              title={property.title}
+              location={property.location}
+              beds={property.beds}
+              baths={property.baths}
+              area={property.sqft}
+              price={property.price}
+              priceType={property.priceType}
+              buildYear={property.buildYear}
+              tags={[
+                property.type,
+                ...(property.featured ? ["Featured"] : []),
+                ...(property.hot ? ["Hot"] : []),
+              ]}
+              date={property.addedDate}
+            />
+          ))}
+        </div>
       </div>
       <div className="flex justify-center mt-6 sm:mt-8">
         <div className="flex gap-2">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Lenis from "lenis";
 import { motion, useAnimation } from "framer-motion";
@@ -7,6 +7,52 @@ import RealEstateHero from "@/components/about-hero";
 import { FeaturedPropertiesAbout } from "@/components/feature-propertise-about";
 
 export default function AboutPage() {
+  const [isHeroVisible, setIsHeroVisible] = useState(false);
+  const [isContentVisible, setIsContentVisible] = useState(false);
+  const heroRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const heroObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsHeroVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    const contentObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsContentVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    if (heroRef.current) {
+      heroObserver.observe(heroRef.current);
+    }
+
+    if (contentRef.current) {
+      contentObserver.observe(contentRef.current);
+    }
+
+    return () => {
+      if (heroRef.current) {
+        heroObserver.unobserve(heroRef.current);
+      }
+      if (contentRef.current) {
+        contentObserver.unobserve(contentRef.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const lenis = new Lenis({
@@ -30,8 +76,33 @@ export default function AboutPage() {
   }, []);
 
   const [isHovered, setIsHovered] = useState(false);
+  const [isTeamVisible, setIsTeamVisible] = useState(false);
   const topRowControls = useAnimation();
   const bottomRowControls = useAnimation();
+  const teamRef = useRef(null);
+
+  useEffect(() => {
+    const teamObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsTeamVisible(true);
+        }
+      },
+      {
+        threshold: 0.05,
+      }
+    );
+
+    if (teamRef.current) {
+      teamObserver.observe(teamRef.current);
+    }
+
+    return () => {
+      if (teamRef.current) {
+        teamObserver.unobserve(teamRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const animateRows = async () => {
@@ -111,7 +182,14 @@ export default function AboutPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="flex justify-center mt-10 pl-0 pr-0">
+      <div
+        ref={heroRef}
+        className={`flex justify-center mt-10 pl-0 pr-0 transform transition-all duration-1000 ease-out ${
+          isHeroVisible
+            ? "translate-y-0 opacity-100"
+            : "translate-y-20 opacity-0"
+        }`}
+      >
         <div className="relative w-[95%] h-64 rounded-xl overflow-hidden">
           <div className="w-full h-full transform transition-transform duration-300 hover:scale-[1.05]">
             <Image
@@ -128,11 +206,30 @@ export default function AboutPage() {
       </div>
 
       <main className="w-full px-0 py-4">
-        <section className="max-w-6xl mx-auto mb-16 text-[#080a0f] mt-12 px-4 sm:px-4 md:px-6">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center">
+        <section
+          ref={contentRef}
+          className={`max-w-6xl mx-auto mb-16 text-[#080a0f] mt-12 px-4 sm:px-4 md:px-6 transform transition-all duration-1000 ease-out ${
+            isContentVisible
+              ? "translate-y-0 opacity-100"
+              : "translate-y-20 opacity-0"
+          }`}
+        >
+          <h2
+            className={`text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center transform transition-all duration-1000 ease-out delay-200 ${
+              isContentVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             Your Trusted Gateway to Ahmedabad's Finest Homes
           </h2>
-          <p className="text-sm sm:text-base text-center mb-4 sm:mb-6 text-[#080a0f]">
+          <p
+            className={`text-sm sm:text-base text-center mb-4 sm:mb-6 text-[#080a0f] transform transition-all duration-1000 ease-out delay-400 ${
+              isContentVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             Mindestate is more than just a real estate provider—it's your
             trusted partner in discovering Ahmedabad's most promising
             under-construction residential projects. We bring you exclusive
@@ -140,7 +237,13 @@ export default function AboutPage() {
             invest in a future-ready home. With deep market expertise,
             personalized guidance, and a data-driven approach.
           </p>
-          <p className="text-sm sm:text-base text-center text-[#1e2532]">
+          <p
+            className={`text-sm sm:text-base text-center text-[#1e2532] transform transition-all duration-1000 ease-out delay-600 ${
+              isContentVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             We transform the complex world of real estate into a seamless,
             transparent experience. From selecting the perfect property to
             understanding the city's evolving infrastructure, we empower you
@@ -153,11 +256,20 @@ export default function AboutPage() {
         <div>
           <RealEstateHero />
 
-          <section className="mb-16 overflow-hidden mt-12">
-            {/* <h2 className="text-2xl font-bold mb-6 text-center">Our Team & Achievements</h2> */}
-
+          <section
+            ref={teamRef}
+            className={`mb-16 overflow-hidden mt-12 transform transition-all duration-1000 ease-out ${
+              isTeamVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <div
-              className="overflow-hidden"
+              className={`overflow-hidden transform transition-all duration-1000 ease-out delay-200 ${
+                isTeamVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
@@ -168,7 +280,7 @@ export default function AboutPage() {
                 {images.topRow.map((image, index) => (
                   <div
                     key={index}
-                    className="flex-shrink-0 w-[280px] h-[200px] overflow-hidden inline-block"
+                    className="flex-shrink-0 w-[140px] h-[100px] sm:w-[280px] sm:h-[200px] overflow-hidden inline-block"
                   >
                     <Image
                       src={image.src}
@@ -183,7 +295,11 @@ export default function AboutPage() {
             </div>
 
             <div
-              className="overflow-hidden"
+              className={`overflow-hidden transform transition-all duration-1000 ease-out delay-400 ${
+                isTeamVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-20 opacity-0"
+              }`}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
@@ -194,7 +310,7 @@ export default function AboutPage() {
                 {images.bottomRow.map((image, index) => (
                   <div
                     key={index}
-                    className="flex-shrink-0 w-[280px] h-[200px] overflow-hidden inline-block"
+                    className="flex-shrink-0 w-[140px] h-[100px] sm:w-[280px] sm:h-[200px] overflow-hidden inline-block"
                   >
                     <Image
                       src={image.src}
