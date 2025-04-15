@@ -1,6 +1,6 @@
 // pages/properties/[slug].jsx
 import { PropertyDetailComplete } from "@/components/property-detail-complete";
-import { properties } from "@/components/properties-list-fullwidth";
+import { properties } from "../../../data/properties";
 
 export async function generateStaticParams() {
   return properties.map((property) => ({

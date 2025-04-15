@@ -1,9 +1,36 @@
 "use client";
+import { useState, useRef, useEffect } from "react";
 import { Search } from "lucide-react";
 import Lenis from "lenis";
-import { useEffect } from "react";
 
 export function ProductSection() {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const lenis = new Lenis({
@@ -25,9 +52,19 @@ export function ProductSection() {
       };
     }
   }, []);
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <section className="relative w-full h-[400px] bg-gray-200 overflow-hidden rounded-xl">
+    <div
+      ref={sectionRef}
+      className={`container mx-auto px-4 py-8 transition-all duration-1000 ease-out ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+      }`}
+    >
+      <section
+        className={`relative w-full h-[400px] bg-gray-200 overflow-hidden rounded-xl transition-all duration-1000 ease-out delay-100 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}
+      >
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -35,13 +72,35 @@ export function ProductSection() {
             filter: "brightness(0.7)",
           }}
         ></div>
-        <div className="relative h-full flex flex-col justify-center items-center text-white px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-12">
+        <div
+          className={`relative h-full flex flex-col justify-center items-center text-white px-4 transition-all duration-1000 ease-out delay-200 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
+        >
+          <h1
+            className={`text-4xl md:text-5xl font-bold mb-12 transition-all duration-1000 ease-out delay-300 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             Thaltej / Ahmedabad
           </h1>
 
-          <div className="w-full max-w-5xl bg-white/10 backdrop-blur-sm p-2 rounded-lg">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+          <div
+            className={`w-full max-w-5xl bg-white/10 backdrop-blur-sm p-2 rounded-lg transition-all duration-1000 ease-out delay-400 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
+            <div
+              className={`grid grid-cols-1 md:grid-cols-4 gap-2 transition-all duration-1000 ease-out delay-500 ${
+                isVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-10 opacity-0"
+              }`}
+            >
               <div className="relative">
                 <select className="w-full p-3 rounded-md bg-white text-black appearance-none pr-10">
                   <option>All Status</option>
@@ -118,7 +177,13 @@ export function ProductSection() {
                 </div>
               </div>
 
-              <button className="bg-accent hover:bg-accent/90 text-white p-3 rounded-md flex items-center justify-center">
+              <button
+                className={`bg-accent hover:bg-accent/90 text-white p-3 rounded-md flex items-center justify-center transition-all duration-1000 ease-out delay-600 ${
+                  isVisible
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-10 opacity-0"
+                }`}
+              >
                 <Search className="w-5 h-5 mr-2" />
                 Search
               </button>

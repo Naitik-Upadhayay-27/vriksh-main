@@ -1,15 +1,58 @@
-export function Newsletter() {
+import { useState, useRef, useEffect } from "react";
+
+export default function Newsletter() {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <section className="py-8 md:py-16 px-4 md:px-8 bg-[#BB9632] text-white min-h-[300px] md:h-[400px] flex items-center relative overflow-hidden">
+    <section
+      ref={sectionRef}
+      className={`py-8 md:py-16 px-4 md:px-8 bg-[#BB9632] text-white min-h-[300px] md:h-[400px] flex items-center relative overflow-hidden transform transition-all duration-1000 ease-out ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+      }`}
+    >
       {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10">
+      <div
+        className={`absolute inset-0 opacity-10 transform transition-all duration-1000 ease-out delay-200 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+        }`}
+      >
         <div className="absolute top-0 left-0 w-32 md:w-64 h-32 md:h-64 rounded-full bg-white transform -translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 right-0 w-48 md:w-96 h-48 md:h-96 rounded-full bg-white transform translate-x-1/4 translate-y-1/4"></div>
       </div>
 
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
-          <div className="space-y-4 md:space-y-6">
+          <div
+            className={`space-y-4 md:space-y-6 transform transition-all duration-1000 ease-out delay-300 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">
               Subscribe to our{" "}
               <span className="underline decoration-2 decoration-white/60">
@@ -23,7 +66,13 @@ export function Newsletter() {
             </p>
           </div>
 
-          <div className="flex items-center mt-6 md:mt-0">
+          <div
+            className={`flex items-center mt-6 md:mt-0 transform transition-all duration-1000 ease-out delay-400 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-20 opacity-0"
+            }`}
+          >
             <form className="w-full flex flex-col sm:flex-row gap-3 md:gap-4">
               <input
                 type="email"

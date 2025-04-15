@@ -1,20 +1,65 @@
-export function ContactInfo() {
+import { useState, useRef, useEffect } from "react";
+
+export default function ContactInfo() {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <section className="py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-12 w-full bg-gray-50 h-auto min-h-[370px] overflow-auto">
-      <div className="mb-3 text-left ml-4 sm:ml-8 md:ml-18">
+    <section
+      ref={sectionRef}
+      className={`py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-12 w-full bg-gray-50 h-auto min-h-[370px] overflow-auto transform transition-all duration-1000 ease-out ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+      }`}
+    >
+      <div
+        className={`mb-3 text-left ml-4 sm:ml-8 md:ml-18 transform transition-all duration-1000 ease-out delay-200 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+        }`}
+      >
         <span className="text-gray-800 font-medium tracking-wide">
           CONTACT INFO
         </span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 md:gap-10 max-w-7xl mx-auto">
-        <div className="sm:col-span-2 md:col-span-1">
+        <div
+          className={`sm:col-span-2 md:col-span-1 transform transition-all duration-1000 ease-out delay-300 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+          }`}
+        >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-gray-900">
             We are always happy to assist you
           </h2>
         </div>
 
-        <div>
+        <div
+          className={`transform transition-all duration-1000 ease-out delay-400 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+          }`}
+        >
           <h3 className="text-base sm:text-lg font-semibold mb-2 text-gray-900">
             Email Address
           </h3>
@@ -32,7 +77,11 @@ export function ContactInfo() {
           </div>
         </div>
 
-        <div>
+        <div
+          className={`transform transition-all duration-1000 ease-out delay-500 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+          }`}
+        >
           <h3 className="text-base sm:text-lg font-semibold mb-2 text-gray-900">
             Number
           </h3>

@@ -1,14 +1,54 @@
+import { useState, useRef, useEffect } from "react";
 import { Facebook, Instagram, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-export function ContactForm() {
+export default function ContactForm() {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <section className="py-12 px-4 md:px-8 max-w-7xl mx-auto text-black">
-      <div className="mb-8">
+    <section
+      ref={sectionRef}
+      className={`py-12 px-4 md:px-8 max-w-7xl mx-auto text-black transform transition-all duration-1000 ease-out ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+      }`}
+    >
+      <div
+        className={`mb-8 transform transition-all duration-1000 ease-out delay-200 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+        }`}
+      >
         <span className="text-black font-medium">Get Started</span>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between items-start mb-10">
+      <div
+        className={`flex flex-col md:flex-row justify-between items-start mb-10 transform transition-all duration-1000 ease-out delay-300 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+        }`}
+      >
         <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-0 max-w-xl text-black">
           Get in touch with us. We're here to assist you.
         </h2>
@@ -29,8 +69,16 @@ export function ContactForm() {
         </div>
       </div>
 
-      <form className="space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <form
+        className={`space-y-8 transform transition-all duration-1000 ease-out delay-400 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+        }`}
+      >
+        <div
+          className={`grid grid-cols-1 md:grid-cols-3 gap-6 transform transition-all duration-1000 ease-out delay-500 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+          }`}
+        >
           <div className="space-y-2">
             <label htmlFor="name" className="block text-gray-700">
               Your Name
@@ -67,7 +115,11 @@ export function ContactForm() {
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div
+          className={`space-y-2 transform transition-all duration-1000 ease-out delay-600 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+          }`}
+        >
           <label htmlFor="message" className="block text-gray-700">
             Message
           </label>
@@ -79,7 +131,11 @@ export function ContactForm() {
           ></textarea>
         </div>
 
-        <div>
+        <div
+          className={`transform transition-all duration-1000 ease-out delay-700 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+          }`}
+        >
           <button
             type="submit"
             className="bg-[#BB9632] text-white px-6 py-3 rounded-full font-medium flex items-center"

@@ -371,12 +371,12 @@ export default function HeroSection() {
           />
         </div>
         <div
-          className={`absolute inset-0 bg-gradient-to-b from-black/50 to-black/30 flex flex-col justify-center items-center text-white text-center px-4 transform transition-all duration-1000 ease-out ${
+          className={`absolute inset-0 bg-gradient-to-b from-black/50 to-black/30 flex flex-col justify-center items-center text-white text-center px-4 transform transition-all duration-500 ease-out ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
           }`}
         >
           <h1
-            className={`text-5xl md:text-6xl font-serif font-extrabold mb-6 leading-tight max-w-4xl transform transition-all duration-1000 ease-out ${
+            className={`text-5xl md:text-6xl font-serif font-extrabold mb-6 leading-tight max-w-4xl transform transition-all duration-500 ease-out ${
               isVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -385,7 +385,7 @@ export default function HeroSection() {
             Find. Invest. Thrive.
           </h1>
           <p
-            className={`text-xl md:text-2xl mb-8 max-w-2xl font-light font-serif transform transition-all duration-1000 ease-out delay-200 ${
+            className={`text-xl md:text-2xl mb-8 max-w-2xl font-light font-serif transform transition-all duration-500 ease-out delay-100 ${
               isVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -399,7 +399,7 @@ export default function HeroSection() {
 
       {/* Search Panel Section */}
       <div
-        className={`relative -mt-14 px-4 z-10 transform transition-all duration-1000 ease-out delay-300 ${
+        className={`relative -mt-14 px-4 z-10 transform transition-all duration-500 ease-out delay-150 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
         }`}
       >
@@ -407,7 +407,7 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between">
             {/* Location Field */}
             <div
-              className={`w-full sm:flex-1 px-6 py-4 flex items-center transform transition-all duration-1000 ease-out delay-400 ${
+              className={`w-full sm:flex-1 px-6 py-4 flex items-center transform transition-all duration-500 ease-out delay-200 ${
                 isVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-20 opacity-0"
@@ -439,7 +439,7 @@ export default function HeroSection() {
 
             {/* Separator */}
             <div
-              className={`hidden sm:block w-px h-12 bg-gray-400 my-auto transform transition-all duration-1000 ease-out delay-500 ${
+              className={`hidden sm:block w-px h-12 bg-gray-400 my-auto transform transition-all duration-500 ease-out delay-250 ${
                 isVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-20 opacity-0"
@@ -448,7 +448,7 @@ export default function HeroSection() {
 
             {/* Property Type Field */}
             <div
-              className={`w-full sm:flex-1 px-6 py-4 flex items-center transform transition-all duration-1000 ease-out delay-600 ${
+              className={`w-full sm:flex-1 px-6 py-4 flex items-center transform transition-all duration-500 ease-out delay-300 ${
                 isVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-20 opacity-0"
@@ -482,7 +482,7 @@ export default function HeroSection() {
 
             {/* Separator */}
             <div
-              className={`hidden sm:block w-px h-12 bg-gray-400 my-auto transform transition-all duration-1000 ease-out delay-700 ${
+              className={`hidden sm:block w-px h-12 bg-gray-400 my-auto transform transition-all duration-500 ease-out delay-350 ${
                 isVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-20 opacity-0"
@@ -491,7 +491,7 @@ export default function HeroSection() {
 
             {/* Price Range Field */}
             <div
-              className={`w-full sm:flex-1 px-6 py-4 flex items-center transform transition-all duration-1000 ease-out delay-800 ${
+              className={`w-full sm:flex-1 px-6 py-4 flex items-center transform transition-all duration-500 ease-out delay-400 ${
                 isVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-20 opacity-0"
@@ -525,7 +525,7 @@ export default function HeroSection() {
 
             {/* Search Button */}
             <div
-              className={`w-full sm:w-auto py-3 px-4 flex justify-center transform transition-all duration-1000 ease-out delay-900 ${
+              className={`w-full sm:w-auto py-3 px-4 flex justify-center transform transition-all duration-500 ease-out delay-450 ${
                 isVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-20 opacity-0"
@@ -557,7 +557,7 @@ export default function HeroSection() {
       {/* Featured Properties Section */}
       <section
         ref={propertiesRef}
-        className={`py-8 md:py-16 px-4 transform transition-all duration-1000 ease-out ${
+        className={`py-8 md:py-16 px-4 transform transition-all duration-500 ease-out ${
           isPropertiesVisible
             ? "translate-y-0 opacity-100"
             : "translate-y-20 opacity-0"
@@ -565,7 +565,7 @@ export default function HeroSection() {
       >
         <div className="container mx-auto py-4 md:py-8 px-4 sm:px-6">
           <div
-            className={`flex flex-col justify-between items-left mb-8 transform transition-all duration-1000 ease-out delay-200 ${
+            className={`flex flex-col justify-between items-left mb-8 transform transition-all duration-500 ease-out delay-100 ${
               isPropertiesVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -575,7 +575,7 @@ export default function HeroSection() {
               Our featured exclusives
             </h1>
             <div
-              className={`hidden mt-8 md:flex md:flex-row md:items-center md:space-x-6 border-b border-gray-200 relative transform transition-all duration-1000 ease-out delay-400 ${
+              className={`hidden mt-8 md:flex md:flex-row md:items-center md:space-x-6 border-b border-gray-200 relative transform transition-all duration-500 ease-out delay-200 ${
                 isPropertiesVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-20 opacity-0"
@@ -667,7 +667,7 @@ export default function HeroSection() {
 
           {/* Mobile tabs */}
           <div
-            className={`flex md:hidden items-center space-x-6 mb-6 overflow-x-auto pb-2 transform transition-all duration-1000 ease-out delay-600 ${
+            className={`flex md:hidden items-center space-x-6 mb-6 overflow-x-auto pb-2 transform transition-all duration-500 ease-out delay-300 ${
               isPropertiesVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -758,7 +758,7 @@ export default function HeroSection() {
 
           {isClient && (
             <div
-              className={`relative transform transition-all duration-1000 ease-out delay-800 ${
+              className={`relative transform transition-all duration-500 ease-out delay-400 ${
                 isPropertiesVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-20 opacity-0"
@@ -904,7 +904,7 @@ export default function HeroSection() {
       {/* Testimonial and Following Sections */}
       <section
         ref={testimonialRef}
-        className={`py-16 px-4 bg-[#FFFAF4] transform transition-all duration-1000 ease-out ${
+        className={`py-16 px-4 bg-[#FFFAF4] transform transition-all duration-500 ease-out ${
           isTestimonialVisible
             ? "translate-y-0 opacity-100"
             : "translate-y-20 opacity-0"
@@ -912,7 +912,7 @@ export default function HeroSection() {
       >
         <div className="container mx-auto">
           <div
-            className={`mb-16 relative transform transition-all duration-1000 ease-out delay-200 ${
+            className={`mb-16 relative transform transition-all duration-500 ease-out delay-100 ${
               isTestimonialVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -925,7 +925,7 @@ export default function HeroSection() {
               </h2>
               <div className="h-1 w-24 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto my-6"></div>
               <div
-                className={`flex justify-center mt-8 transform transition-all duration-1000 ease-out delay-400 ${
+                className={`flex justify-center mt-8 transform transition-all duration-500 ease-out delay-200 ${
                   isTestimonialVisible
                     ? "translate-y-0 opacity-100"
                     : "translate-y-20 opacity-0"
@@ -968,7 +968,7 @@ export default function HeroSection() {
           </div>
 
           <div
-            className={`flex justify-between items-center mb-8 transform transition-all duration-1000 ease-out delay-600 ${
+            className={`flex justify-between items-center mb-8 transform transition-all duration-500 ease-out delay-300 ${
               isTestimonialVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -998,7 +998,7 @@ export default function HeroSection() {
           </div>
 
           <div
-            className={`relative transform transition-all duration-1000 ease-out delay-800 ${
+            className={`relative transform transition-all duration-500 ease-out delay-400 ${
               isTestimonialVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -1167,7 +1167,7 @@ export default function HeroSection() {
       {/* Contact section */}
       <section
         ref={contactRef}
-        className={`py-4 md:py-16 pb-8 md:pb-28 px-0 relative mb-2 md:mb-8 transform transition-all duration-1000 ease-out ${
+        className={`py-4 md:py-16 pb-8 md:pb-28 px-0 relative mb-2 md:mb-8 transform transition-all duration-500 ease-out ${
           isContactVisible
             ? "translate-y-0 opacity-100"
             : "translate-y-20 opacity-0"
@@ -1177,7 +1177,7 @@ export default function HeroSection() {
           <div className="flex flex-col md:flex-row justify-between items-start">
             {/* Social Media Buttons - Mobile Only */}
             <div
-              className={`md:hidden flex gap-3 self-end -mb-8 w-full justify-end transform transition-all duration-1000 ease-out delay-200 ${
+              className={`md:hidden flex gap-3 self-end -mb-8 w-full justify-end transform transition-all duration-500 ease-out delay-100 ${
                 isContactVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-20 opacity-0"
@@ -1227,7 +1227,7 @@ export default function HeroSection() {
               </a>
             </div>
             <div
-              className={`w-full md:w-auto transform transition-all duration-1000 ease-out delay-400 ${
+              className={`w-full md:w-auto transform transition-all duration-500 ease-out delay-200 ${
                 isContactVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-20 opacity-0"
@@ -1241,7 +1241,7 @@ export default function HeroSection() {
           </div>
           {/* Social Media Buttons - Desktop Only */}
           <div
-            className={`hidden md:flex absolute right-8 top-1/3 flex-col gap-3 transform transition-all duration-1000 ease-out delay-600 ${
+            className={`hidden md:flex absolute right-8 top-1/3 flex-col gap-3 transform transition-all duration-500 ease-out delay-300 ${
               isContactVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -1290,7 +1290,7 @@ export default function HeroSection() {
           </div>
           {/* structure of form  */}
           <div
-            className={`flex flex-col md:flex-row justify-between gap-3 mt-5 transform transition-all duration-1000 ease-out delay-800 ${
+            className={`flex flex-col md:flex-row justify-between gap-3 mt-5 transform transition-all duration-500 ease-out delay-400 ${
               isContactVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -1319,7 +1319,7 @@ export default function HeroSection() {
             </div>
           </div>
           <div
-            className={`mt-5 transform transition-all duration-1000 ease-out delay-1000 ${
+            className={`mt-5 transform transition-all duration-500 ease-out delay-500 ${
               isContactVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -1332,7 +1332,7 @@ export default function HeroSection() {
             />
           </div>
           <div
-            className={`mt-6 md:mt-8 transform transition-all duration-1000 ease-out delay-1200 ${
+            className={`mt-6 md:mt-8 transform transition-all duration-500 ease-out delay-600 ${
               isContactVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"

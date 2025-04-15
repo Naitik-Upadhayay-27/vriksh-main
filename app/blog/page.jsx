@@ -1,8 +1,8 @@
 "use client";
 import Lenis from "lenis";
 import { useEffect } from "react";
-import { BlogHero } from "@/components/blog-hero";
-import { BlogList } from "@/components/blog-list";
+import BlogHero from "@/components/blog-hero";
+import BlogList from "@/components/blog-list";
 
 export default function BlogPage() {
   useEffect(() => {

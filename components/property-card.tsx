@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image"
 import { Heart, Share2, MapPin, Bed, Bath, Square } from "lucide-react"
 
@@ -18,15 +21,50 @@ interface PropertyCardProps {
         addedDate: string
         buildYear: string | null
     }
+    animationDelay?: number;
 }
 
-export function PropertyCard({ property }: PropertyCardProps) {
+export default function PropertyCard({ property, animationDelay = 0 }: PropertyCardProps) {
+    const [isVisible, setIsVisible] = useState(false);
+    const cardRef = useRef(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                }
+            },
+            {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            }
+        );
+
+        if (cardRef.current) {
+            observer.observe(cardRef.current);
+        }
+
+        return () => {
+            if (cardRef.current) {
+                observer.unobserve(cardRef.current);
+            }
+        };
+    }, []);
+
     return (
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+        <div 
+            ref={cardRef}
+            className={`bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-1000 ease-out ${
+                isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+            }`}
+        >
             <div className="flex flex-col md:flex-row">
                 {/* Property Image */}
-                <div className="relative md:w-1/3 h-64 md:h-auto overflow-hidden">
-                    <div className="w-full h-full transform transition-transform duration-300 hover:scale-2000 hover:rounded-none">
+                <div className={`relative md:w-1/3 h-64 md:h-auto overflow-hidden transition-all duration-1000 ease-out delay-${animationDelay + 100} ${
+                    isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                }`}>
+                    <div className="w-full h-full transform transition-transform duration-300 hover:scale-105 hover:rounded-none">
                         <Image 
                             src={property.image || "/placeholder.svg"} 
                             alt={property.title} 
@@ -35,7 +73,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
                         />
                     </div>
                     <div className="absolute bottom-3 left-3 flex space-x-2">
-                        <div className="bg-black bg-opacity-60 text-black text-xs px-1.5 py-1 rounded-md flex items-center">
+                        <div className="bg-black bg-opacity-60 text-white text-xs px-1.5 py-1 rounded-md flex items-center">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-4 w-4 mr-1"
@@ -79,10 +117,14 @@ export function PropertyCard({ property }: PropertyCardProps) {
                 </div>
 
                 {/* Property Details */}
-                <div className="p-5 flex-1 flex flex-col">
+                <div className={`p-5 flex-1 flex flex-col transition-all duration-1000 ease-out delay-${animationDelay + 200} ${
+                    isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                }`}>
                     <div className="flex-1">
                         {/* Tags */}
-                        <div className="flex flex-wrap gap-2 mb-3">
+                        <div className={`flex flex-wrap gap-2 mb-3 transition-all duration-1000 ease-out delay-${animationDelay + 300} ${
+                            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                        }`}>
                             <span
                                 className={`text-xs font-medium px-2 py-1 rounded-full ${property.type === "For Rent" ? "bg-[#BB9627] text-white" : "bg-[#BB9627] text-purple-700"}`}
                             >
@@ -101,16 +143,22 @@ export function PropertyCard({ property }: PropertyCardProps) {
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-xl font-semibold mb-2">{property.title}</h3>
+                        <h3 className={`text-xl font-semibold mb-2 transition-all duration-1000 ease-out delay-${animationDelay + 400} ${
+                            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                        }`}>{property.title}</h3>
 
                         {/* Location */}
-                        <div className="flex items-start mb-4">
+                        <div className={`flex items-start mb-4 transition-all duration-1000 ease-out delay-${animationDelay + 500} ${
+                            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                        }`}>
                             <MapPin className="w-4 h-4 text-gray-500 mt-0.5 mr-1 flex-shrink-0" />
                             <span className="text-sm text-gray-600">{property.location}</span>
                         </div>
 
                         {/* Features */}
-                        <div className="flex flex-wrap gap-4 mb-4">
+                        <div className={`flex flex-wrap gap-4 mb-4 transition-all duration-1000 ease-out delay-${animationDelay + 600} ${
+                            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                        }`}>
                             {property.beds && (
                                 <div className="flex items-center">
                                     <Bed className="w-4 h-4 text-gray-500 mr-1" />
@@ -132,11 +180,15 @@ export function PropertyCard({ property }: PropertyCardProps) {
                         </div>
 
                         {/* Added date */}
-                        <div className="text-xs text-gray-500 mb-4">Added: {property.addedDate}</div>
+                        <div className={`text-xs text-gray-500 mb-4 transition-all duration-1000 ease-out delay-${animationDelay + 700} ${
+                            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                        }`}>Added: {property.addedDate}</div>
                     </div>
 
                     {/* Price and Action Buttons Container */}
-                    <div className="mt-auto">
+                    <div className={`mt-auto transition-all duration-1000 ease-out delay-${animationDelay + 800} ${
+                        isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                    }`}>
                         {/* Price */}
                         <div className="mb-4">
                             <div className="flex items-baseline">
@@ -158,7 +210,9 @@ export function PropertyCard({ property }: PropertyCardProps) {
                     </div>
 
                     {/* Favorite and Share */}
-                    <div className="absolute top-5 right-5 flex space-x-2">
+                    <div className={`absolute top-5 right-5 flex space-x-2 transition-all duration-1000 ease-out delay-${animationDelay + 900} ${
+                        isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                    }`}>
                         <button className="text-gray-400 hover:text-red-500">
                             <Heart className="w-5 h-5" />
                         </button>

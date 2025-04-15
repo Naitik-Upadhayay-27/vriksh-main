@@ -2,7 +2,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Check,
   Download,
@@ -15,6 +15,9 @@ import {
   Tag,
   ChevronLeft,
   ChevronRight,
+  Bed,
+  Bath,
+  Square,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,6 +32,15 @@ export function PropertyDetailComplete({ property }) {
   const [dragOffset, setDragOffset] = useState(0);
   const [showGallery, setShowGallery] = useState(false);
   const [galleryCurrentSlide, setGalleryCurrentSlide] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isMainContentVisible, setIsMainContentVisible] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [isSimilarPropertiesVisible, setIsSimilarPropertiesVisible] =
+    useState(false);
+  const sectionRef = useRef(null);
+  const mainContentRef = useRef(null);
+  const sidebarRef = useRef(null);
+  const similarPropertiesRef = useRef(null);
 
   // Minimum distance for a swipe
   const minSwipeDistance = 50;
@@ -40,7 +52,7 @@ export function PropertyDetailComplete({ property }) {
     "/about4.png",
     "/about5.png",
     "/about6.png",
-    "/about7.png",
+    "/about1.png",
     "/about8.png",
     "/about9.png",
     "/about10.png",
@@ -190,8 +202,89 @@ export function PropertyDetailComplete({ property }) {
     );
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    const mainContentObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsMainContentVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    const sidebarObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsSidebarVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    const similarPropertiesObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsSimilarPropertiesVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    if (mainContentRef.current) {
+      mainContentObserver.observe(mainContentRef.current);
+    }
+    if (sidebarRef.current) {
+      sidebarObserver.observe(sidebarRef.current);
+    }
+    if (similarPropertiesRef.current) {
+      similarPropertiesObserver.observe(similarPropertiesRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+      if (mainContentRef.current) {
+        mainContentObserver.unobserve(mainContentRef.current);
+      }
+      if (sidebarRef.current) {
+        sidebarObserver.unobserve(sidebarRef.current);
+      }
+      if (similarPropertiesRef.current) {
+        similarPropertiesObserver.unobserve(similarPropertiesRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col text-black w-[114%] ml-[-7%] p-0 m-0 overflow-hidden">
+    <div
+      ref={sectionRef}
+      className="flex flex-col text-black w-[114%] ml-[-7%] p-0 m-0 overflow-hidden"
+    >
       {/* Image Gallery Overlay */}
       {showGallery && (
         <div className="fixed inset-0 z-50">
@@ -295,10 +388,20 @@ export function PropertyDetailComplete({ property }) {
       )}
 
       {/* Image Gallery Section */}
-      <div className="w-full p-0 mb-6 md:mb-14">
+      <div
+        className={`w-full p-0 mb-6 md:mb-14 transition-all duration-500 ease-out ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}
+      >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-2 px-4 md:px-0">
           {/* Main Image */}
-          <div className="md:col-span-9 relative group">
+          <div
+            className={`md:col-span-9 relative group transition-all duration-500 ease-out delay-100 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <div className="relative w-full h-[240px] sm:h-[400px] md:h-[520px] overflow-hidden rounded-t-xl md:rounded-xl">
               <Image
                 src={property.image}
@@ -328,7 +431,13 @@ export function PropertyDetailComplete({ property }) {
           </div>
 
           {/* Desktop Thumbnail Gallery */}
-          <div className="hidden md:grid md:col-span-3 grid-cols-1 gap-2">
+          <div
+            className={`hidden md:grid md:col-span-3 grid-cols-1 gap-2 transition-all duration-500 ease-out delay-200 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <div className="relative w-full h-[258px] overflow-hidden rounded-xl">
               <Image
                 src="/about1.png"
@@ -354,7 +463,13 @@ export function PropertyDetailComplete({ property }) {
           </div>
 
           {/* Mobile Thumbnail Gallery */}
-          <div className="block md:hidden">
+          <div
+            className={`block md:hidden transition-all duration-500 ease-out delay-300 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <div className="grid grid-cols-5 gap-1">
               {[1, 2, 3, 4, 5].map((index) => (
                 <div
@@ -384,9 +499,86 @@ export function PropertyDetailComplete({ property }) {
         </div>
       </div>
 
+      <div
+        className={`px-4 md:px-0 transition-all duration-500 ease-out delay-400 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}
+      >
+        <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-[#1d1d1f] mb-2">
+              {property.title}
+            </h1>
+            <div className="flex items-center text-sm text-[#666666]">
+              <MapPin className="h-4 w-4 text-[#BB9627] mr-1" />
+              <span>{property.location}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="p-2 rounded-full bg-gray-100 hover:bg-gray-200">
+              <Heart className="h-5 w-5 text-[#666666]" />
+            </button>
+            <button className="p-2 rounded-full bg-gray-100 hover:bg-gray-200">
+              <Share2 className="h-5 w-5 text-[#666666]" />
+            </button>
+          </div>
+        </div>
+
+        <div
+          className={`grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 transition-all duration-500 ease-out delay-500 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <Bed className="h-5 w-5 text-[#BB9627]" />
+            <span className="text-sm text-[#666666]">{property.beds} Beds</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Bath className="h-5 w-5 text-[#BB9627]" />
+            <span className="text-sm text-[#666666]">
+              {property.baths} Baths
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Square className="h-5 w-5 text-[#BB9627]" />
+            <span className="text-sm text-[#666666]">{property.sqft}</span>
+          </div>
+        </div>
+
+        <div
+          className={`flex flex-col md:flex-row justify-between items-start gap-4 mb-6 transition-all duration-500 ease-out delay-600 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
+        >
+          <div>
+            <div className="text-2xl font-bold text-[#1d1d1f]">
+              {property.price}
+            </div>
+            {property.priceType && (
+              <div className="text-sm text-[#666666]">{property.priceType}</div>
+            )}
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+            <button className="px-6 py-2 bg-[#183E70] text-white rounded-md text-sm font-medium w-full md:w-auto">
+              WhatsApp Us
+            </button>
+            <button className="px-6 py-2 bg-[#BB9627] text-white rounded-md text-sm font-medium w-full md:w-auto">
+              Get a Call
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="grid px-4 sm:px-8 grid-cols-1 md:grid-cols-3 gap-4">
         {/* Main Content */}
-        <div className="md:col-span-2 space-y-2 sm:space-y-4">
+        <div
+          ref={mainContentRef}
+          className={`md:col-span-2 space-y-2 sm:space-y-4 transition-all duration-500 ease-out ${
+            isMainContentVisible
+              ? "translate-y-0 opacity-100"
+              : "translate-y-10 opacity-0"
+          }`}
+        >
           {/* Title and Basic Info */}
           <div className="bg-white p-4 rounded-lg">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
@@ -429,7 +621,13 @@ export function PropertyDetailComplete({ property }) {
           </div>
 
           {/* Special Price and Offers */}
-          <div className="bg-white p-4 rounded-lg space-y-2 order-1 sm:order-none">
+          <div
+            className={`bg-white p-4 rounded-lg space-y-2 order-1 sm:order-none transition-all duration-500 ease-out delay-800 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <div className="flex items-center gap-2">
               <Tag className="h-4 w-4 text-[#BB9627]" />
               <span className="text-sm font-medium text-black">
@@ -458,14 +656,26 @@ export function PropertyDetailComplete({ property }) {
           </div>
 
           {/* Download Button */}
-          <div className="flex items-center justify-center ml-4 sm:justify-start gap-2 mt-2 order-2 sm:order-none">
+          <div
+            className={`flex items-center justify-center ml-4 sm:justify-start gap-2 mt-2 order-2 sm:order-none transition-all duration-500 ease-out delay-900 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <Button className="w-full sm:w-auto rounded-full px-15 shadow-sm hover:shadow bg-[#BB9627] hover:bg-[#BB9627]/80 text-white">
               Download
             </Button>
           </div>
 
           {/* Property Specs */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 pl-4 gap-2 border-t border-gray-200 py-3 my-2">
+          <div
+            className={`grid grid-cols-2 sm:grid-cols-3 pl-4 gap-2 border-t border-gray-200 py-3 my-2 transition-all duration-500 ease-out delay-1000 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <div className="flex flex-col gap-1">
               <div className="text-xs sm:text-sm text-gray-600">Rooms:</div>
               <div className="text-sm sm:text-base font-medium text-gray-700">
@@ -507,7 +717,13 @@ export function PropertyDetailComplete({ property }) {
           </div>
 
           {/* Description */}
-          <div className="bg-white p-4 rounded-lg space-y-2">
+          <div
+            className={`bg-white p-4 rounded-lg space-y-2 transition-all duration-500 ease-out delay-1100 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <h2 className="text-xl font-bold text-black">Description</h2>
             <p className="text-gray-600 text-sm leading-relaxed">
               Maecenas egestas quam et volutpat bibendum metus vulputate platea
@@ -520,8 +736,15 @@ export function PropertyDetailComplete({ property }) {
               ut consequat sed amet nullam.
             </p>
           </div>
+
           {/* Highlights */}
-          <div className="bg-white p-4 mb-8 rounded-lg">
+          <div
+            className={`bg-white p-4 mb-8 rounded-lg transition-all duration-500 ease-out delay-1200 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <div className="flex gap-8">
               <h3 className="text-base font-sm text-zinc-600 w-32">
                 Highlights:
@@ -556,8 +779,15 @@ export function PropertyDetailComplete({ property }) {
               </div>
             </div>
           </div>
+
           {/* More Information */}
-          <section className="bg-white p-4 rounded-lg mb-4">
+          <section
+            className={`bg-white p-4 rounded-lg mb-4 transition-all duration-500 ease-out delay-1300 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <h2 className="text-xl font-semibold mb-6">More Information</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex flex-row sm:flex-row items-center sm:items-center">
@@ -678,8 +908,15 @@ export function PropertyDetailComplete({ property }) {
               </div>
             </div>
           </section>
+
           {/* Property Summary */}
-          <section className="bg-white p-4 rounded-lg mb-4">
+          <section
+            className={`bg-white p-4 rounded-lg mb-4 transition-all duration-500 ease-out delay-1400 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <h2 className="text-xl font-semibold mb-6">Property Summary</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-0">
               <div className="flex items-center whitespace-nowrap border-t sm:border-t border-b sm:border-b border-gray-200 py-4">
@@ -762,8 +999,15 @@ export function PropertyDetailComplete({ property }) {
               </div>
             </div>
           </section>
+
           {/* Features */}
-          <section className="bg-white p-4 rounded-lg mb-4">
+          <section
+            className={`bg-white p-4 rounded-lg mb-4 transition-all duration-500 ease-out delay-1500 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <h2 className="text-xl font-semibold mb-6">Property Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4">
               {[
@@ -799,8 +1043,15 @@ export function PropertyDetailComplete({ property }) {
               ))}
             </div>
           </section>
+
           {/* Floor Plans */}
-          <section className="bg-white py-3 px-4 rounded-lg">
+          <section
+            className={`bg-white py-3 px-4 rounded-lg transition-all duration-500 ease-out delay-1600 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <h2 className="text-xl font-semibold mb-6">Floor Plans</h2>
             <div className="space-y-2">
               <div className="flex items-center py-3 px-4 bg-[#F8F5F0]  rounded-md transition-colors duration-300">
@@ -816,8 +1067,15 @@ export function PropertyDetailComplete({ property }) {
               </div>
             </div>
           </section>
+
           {/* Nearby Places */}
-          <section className="bg-white py-3 px-4 rounded-lg">
+          <section
+            className={`bg-white py-3 px-4 rounded-lg transition-all duration-500 ease-out delay-1700 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
             <h2 className="text-xl font-semibold mb-6">Nearby Places</h2>
             <div className="mb-6">
               <div className="grid grid-cols-4 gap-2 sm:hidden">
@@ -936,7 +1194,14 @@ export function PropertyDetailComplete({ property }) {
         </div>
 
         {/* Sidebar */}
-        <div className="md:col-span-1 space-y-4">
+        <div
+          ref={sidebarRef}
+          className={`md:col-span-1 space-y-4 transition-all duration-500 ease-out ${
+            isSidebarVisible
+              ? "translate-y-0 opacity-100"
+              : "translate-y-10 opacity-0"
+          }`}
+        >
           {/* Agent Info */}
           <div className="border border-gray-200 shadow-sm rounded-lg p-4 space-y-4 bg-white">
             <div className="space-y-4">
@@ -1105,9 +1370,15 @@ export function PropertyDetailComplete({ property }) {
           </div>
         </div>
       </div>
+
       {/* Similar Properties */}
       <section
-        className="bg-white py-12 w-full relative"
+        ref={similarPropertiesRef}
+        className={`bg-white py-12 w-full relative transition-all duration-500 ease-out ${
+          isSimilarPropertiesVisible
+            ? "translate-y-0 opacity-100"
+            : "translate-y-10 opacity-0"
+        }`}
         style={{
           marginLeft: "calc(-50vw + 50%)",
           marginRight: "calc(-50vw + 50%)",
